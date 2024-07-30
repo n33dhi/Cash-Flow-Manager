@@ -2,8 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require('cors');
 
-const ScreeningRoute = require("./routes/OnBoardRoute");
+const OnBoardRoute = require("./routes/OnBoardRoute");
 const cashQuesterRoute = require("../Server/routes/cashQuesterRoute");
+const cashMasterRoute = require("../Server/routes/cashMasterRoute");
 
 const app = express();
 
@@ -21,8 +22,9 @@ app.get("/", (req, res) => {
   res.send("Hello from PettyWallet Server!");
 });
 
-app.use("/", ScreeningRoute);
+app.use("/", OnBoardRoute);
 app.use("/cashQuester", cashQuesterRoute);
+app.use("/cashMaster", cashMasterRoute);
 
 
 //DB CONFIG
