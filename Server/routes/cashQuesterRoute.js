@@ -1,9 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const { NewRequest, History } = require("../controllers/cashQuester")
+
+const { NewRequest, History, DeleteRequest } = require("../controllers/cashQuester")
+const { Logout } = require("../controllers/onBoardController");
 const AuthController = require("../middlewares/authorize");
 
-router.post("/newRequest", AuthController(['employee']), NewRequest);
-router.get("/history", AuthController(['employee']), History);
+router.use(AuthController(['employee']));
+
+router.post("/newRequest", NewRequest);
+router.get("/history", History);
+router.delete("/history/:id", DeleteRequest); 
+router.post("/logout", Logout);
 
 module.exports = router;
