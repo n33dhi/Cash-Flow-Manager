@@ -29,7 +29,7 @@ app.use("/cashMaster", cashMasterRoute);
 
 //DB CONFIG
 mongoose
-  .connect("mongodb://localhost:27017/PettyWallet")
+  .connect(process.env.DB_STRING)
   .then(() => {
     console.log("Database Connection Establised");
     app.listen(process.env.PORT || 3002, () => {
