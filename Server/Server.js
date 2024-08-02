@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require('cors');
+const cookieParser = require("cookie-parser");
 
 const OnBoardRoute = require("./routes/OnBoardRoute");
 const cashQuesterRoute = require("../Server/routes/cashQuesterRoute");
@@ -13,9 +14,10 @@ require('dotenv').config();
 
 app.use(express.json());
 app.use(cors({
-  origin: ["http://localhost:3000"],
+  origin: ["http://localhost:3000",],
   credentials: true
 }));
+app.use(cookieParser());
 
 //ROUTES
 app.get("/", (req, res) => {

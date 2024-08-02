@@ -13,7 +13,7 @@ const RegisterUser = async (req, res) => {
       ...req.body,
       password: hashedPassword,
     });
-    res.status(200).json(newUser);
+    return res.status(200).json({status: true, data:newUser});
   } catch (e) {
     res.status(500).json({ message: e.message });
   }
@@ -64,7 +64,7 @@ const Login = async (req, res) => {
 
     await UserDetail.save();
 
-    // res.cookie("accesstoken", accessToken, { maxAge: 60000, secure: true });
+    res.cookie("accesstoken", accessToken, { httpOnly: true, maxAge: 360000, secure: true });
     // res.cookie("refreshtoken", refreshToken, {
     //   maxAge: 30000,
     //   httpOnly: true,
@@ -75,8 +75,8 @@ const Login = async (req, res) => {
     res.status(200).json({
       status: "Login Success",
       // Login: true,
-      token: accessToken,
-      refreshToken: refreshToken,
+      // token: accessToken,
+      // refreshToken: refreshToken,
       //  Data: UserDetail,
     });
   } catch (e) {
