@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import Axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import Logo from "../smiling man with palm up.svg";
 
@@ -23,42 +23,43 @@ const Register = () => {
   });
 
   const [errors, setErrors] = useState({
-    password: "",
+    password: ''
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
+    
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
-
+  
     // Password validation
-    if (name === "password" && value.length < 6) {
+    if (name === 'password' && value.length < 6) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        password: "Password must be at least 6 characters long.",
+        password: 'Password must be at least 6 characters long.',
       }));
     } else {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        [name]: "",
+        [name]: '',
       }));
     }
   };
-
+  
+  
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // console.log(formData);
     await Axios.post("http://localhost:3001/register", formData)
       .then((response) => {
         // console.log(response);
         if (response.data.status) {
-          navigate("/login");
-        }
+            navigate("/login")
+        } 
       })
       .catch((err) => {
         console.log(err);
@@ -66,7 +67,7 @@ const Register = () => {
   };
 
   return (
-    <Box
+<Box
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -188,6 +189,25 @@ const Register = () => {
               Register
             </Button>
           </form>
+          <Box sx={{ marginTop: 2, textAlign: "center" }}>
+        <Typography variant="body2" style={{ marginTop: "10px", textAlign:'initial' }}>
+          Have an Account? {" "}
+          <Link
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/login");
+            }}
+            style={{
+              textDecoration: "none",
+              color: "#32393d",
+              fontWeight: "800",
+            }}
+          >
+            Login
+          </Link>
+        </Typography>
+      </Box>
         </Box>
       </Box>
     </Box>
