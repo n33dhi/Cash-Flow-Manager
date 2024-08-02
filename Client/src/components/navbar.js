@@ -1,9 +1,134 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Typography, Box, IconButton, Menu, MenuItem, Container } from '@mui/material';
+import { Menu as MenuIcon } from '@mui/icons-material';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Navbar = () => {
-  return (
-    <div>Navbar</div>
-  )
-}
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
 
-export default Navbar
+  const handleLogout = () => {
+    console.log("Logout");
+    setAnchorEl(null);
+  };
+
+  const handleHistory = () => {
+    navigate("/cashQuester/history");
+    setAnchorEl(null);
+  };
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+    document.body.style.overflow = 'hidden';
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <AppBar
+      sx={{
+        background: "rgba(255, 255, 255, 0.7)",
+        color: "#32393d",
+        boxShadow: "0 4px 16px 0 hsla(0, 0%, 9%, .1)",
+        backdropFilter: "blur(10px)",
+      }}
+    >
+      <Container maxWidth="xl">
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between", flexWrap: 'wrap' }}>
+          <Box sx={{ display: "flex", alignItems: "center", mb: { xs: 1, md: 0 } }}>
+            <Link
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/");
+              }}
+              style={{
+                textDecoration: "none",
+                fontWeight: "800",
+                display: "flex",
+                flexDirection: "row",
+              }}
+            >
+              <Typography color={"#ff3434"} fontWeight={800} fontSize={24}>
+                Petty
+              </Typography>
+              <Typography color={"#32393d"} fontWeight={800} fontSize={24}>
+                Wallet
+              </Typography>
+            </Link>
+          </Box>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: "center", gap: "45px", flexWrap: 'wrap' }}>
+            <Typography sx={{ fontSize: "20px", fontWeight: "700", opacity: "80%" }}>
+              CashQuester
+            </Typography>
+            <Typography
+              color={"#ff3434"}
+              fontWeight={800}
+              fontSize={18}
+              onClick={handleHistory}
+              sx={{
+                color: "#32393d",
+                cursor: "pointer",
+                "&:hover": {
+                  color: "#ff3434",
+                },
+              }}
+            >
+              History
+            </Typography>
+            <Typography
+              color={"#32393d"}
+              fontWeight={800}
+              fontSize={18}
+              onClick={handleLogout}
+              sx={{
+                color: "#32393d",
+                cursor: "pointer",
+                "&:hover": {
+                  color: "#ff3434",
+                },
+              }}
+            >
+              {" "}
+              Logout
+            </Typography>
+          </Box>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="menu"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <MenuItem onClick={handleHistory}>History</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </Box>
+        </Toolbar>
+      </Container>
+    </AppBar>
+  );
+};
+
+export default Navbar;
