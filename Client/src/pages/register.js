@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import Axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import Logo from "../smiling man with palm up.svg";
 
@@ -21,23 +22,43 @@ const Register = () => {
     role: "",
   });
 
+  const [errors, setErrors] = useState({
+    password: "",
+  });
+
   const handleChange = (event) => {
     const { name, value } = event.target;
-    //   console.log('name:', name);
-    //   console.log('value:', value);
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
-  };
-  
 
-  const handleSubmit = async(e) => {
+    // Password validation
+    if (name === "password" && value.length < 6) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: "Password must be at least 6 characters long.",
+      }));
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "",
+      }));
+    }
+  };
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(formData);
     await Axios.post("http://localhost:3001/register", formData)
       .then((response) => {
-        console.log(response);
+        // console.log(response);
+        if (response.data.status) {
+          navigate("/login");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -52,7 +73,7 @@ const Register = () => {
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        backgroundColor: "#f2f2f2",
+        // backgroundColor: "#f2f2f2",
         p: { xs: 2, md: 0 },
       }}
     >
@@ -67,6 +88,7 @@ const Register = () => {
           borderRadius: 2,
           background: "#fff",
           width: "100%",
+          boxShadow: "0 4px 16px 0 hsla(0, 0%, 9%, .1)",
           maxWidth: 1200,
           gap: { xs: 3, md: 5 },
         }}
@@ -113,7 +135,7 @@ const Register = () => {
         <Box sx={{ flex: 1, width: { xs: "270px", md: "150px" } }}>
           <form
             onSubmit={handleSubmit}
-            style={{ display: "flex", flexDirection: "column", gap: "10px" }}
+            style={{ display: "flex", flexDirection: "column" }}
           >
             <TextField
               label="Name"
@@ -134,16 +156,6 @@ const Register = () => {
               required
               type="email"
             />
-            <TextField
-              label="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-              type="password"
-            />
             <FormControl fullWidth margin="normal">
               <InputLabel id="role-select-label">Role</InputLabel>
               <Select
@@ -159,6 +171,19 @@ const Register = () => {
                 <MenuItem value={"employee"}>Employee</MenuItem>
               </Select>
             </FormControl>
+            <TextField
+              label="Password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+              required
+              type="password"
+              error={!!errors.password}
+              helperText={errors.password || " "}
+              FormHelperTextProps={{ style: { margin: 0 } }}
+            />
             <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
               Register
             </Button>
