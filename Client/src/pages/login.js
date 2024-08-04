@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Box, TextField, Button, Typography } from "@mui/material";
 import Axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"
+import Cookies from "js-cookie";
 
 import image from "../minimal black line money.svg";
 
@@ -22,7 +24,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   Axios.defaults.withCredentials = true;
-  const handleSubmit = async (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // console.log(formData);
     try {
@@ -35,11 +37,32 @@ const Login = () => {
           },
         }
       );
-      console.log("Response:", response.data);
+      // console.log("Response:", response.data);
+      
+      
     } catch (err) {
       console.error("Error:", err.response ? err.response.data : err.message);
     }
   };
+
+  useEffect(() => {
+    // Check token when the component mounts
+    const token = Cookies.get('accessToken');
+    if (token) {
+      try {
+        const decodedToken = jwtDecode(token);
+        const { role } = decodedToken;
+
+        if (role === 'employee') {
+          navigate('/cashQuester/home');
+        } else if (role === 'admin') {
+          navigate('/cashMaster/dashboard');
+        }
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+  }, [navigate]);
 
   return (
     <Box
@@ -54,6 +77,7 @@ const Login = () => {
       padding: { xs: 2, md: 0 }
     }}
   >
+    
     <Box
       sx={{
         display: { xs: 'none', md: 'flex' }, // Hide image on small screens
