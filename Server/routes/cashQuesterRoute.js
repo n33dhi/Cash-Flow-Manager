@@ -10,6 +10,5 @@ router.use(AuthController(['employee']));
 router.post("/newRequest", NewRequest);
 router.get("/history", History);
 router.delete("/history/:id", DeleteRequest); 
-router.post("/logout", Logout);
 
 module.exports = router;

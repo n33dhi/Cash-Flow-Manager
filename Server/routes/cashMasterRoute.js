@@ -11,7 +11,6 @@ router.get("/dashboard", Dashboard);
 router.get("/users", AllUsers);
 router.delete("/users/:id", DeleteUser);
 router.put("/requests", UpdateRequest);
-router.post('/logout', Logout);
 
 
 module.exports = router;

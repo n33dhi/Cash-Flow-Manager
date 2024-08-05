@@ -65,7 +65,7 @@ const Login = async (req, res) => {
     await UserDetail.save();
 
     // res.cookie("accesstoken", accessToken, { httpOnly: true, maxAge: 360000, secure: true });
-    res.cookie("refreshtoken", refreshToken, {
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: false,
       maxAge: 7 * 24 * 60 * 60 * 1000
@@ -126,7 +126,7 @@ const RefreshToken = async (req, res) => {
 const Logout = async (req, res) => {
   try {
     // const { refreshToken } = req.body;
-    const { refreshToken } = req.cookies.refreshToken;
+    const refreshToken  = req.cookies.refreshToken;
 
     if (!refreshToken)
       return res.status(204).json({ message: "Refresh token not provided" });
