@@ -2,14 +2,27 @@ import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, Box, IconButton, Menu, MenuItem, Container } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { useNavigate, Link } from 'react-router-dom';
+import api from "../api/axiosConfig";
+import { clearAccessToken } from '../Utilities/tokenManagement';
+import { useDispatch } from 'react-redux';
+import { clearUserData } from '../stateManagement/authSlice';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleLogout = () => {
-    console.log("Logout");
     setAnchorEl(null);
+    clearAccessToken();
+
+    try {
+      api.post('/logout'); 
+      dispatch(clearUserData()); // clear user data from redux store
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+    navigate('/login');
   };
 
   const handleHistory = () => {

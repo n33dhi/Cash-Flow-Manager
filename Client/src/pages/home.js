@@ -1,9 +1,14 @@
 import React from "react";
 import Navbar from "../components/navbar";
-import {  Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
+import { useSelector } from 'react-redux';
 
 
 const Home = () => {
+
+  const name = useSelector((state) => state.auth.name);
+  // console.log(name)
+  
   return (
     <div style={{}}>
       <Navbar />
@@ -15,7 +20,7 @@ const Home = () => {
           alignItems:'center', 
           }}>
             <Typography fontSize={{xs:16, md:24}} fontWeight={700} textAlign={'left'}>
-                Welcome, Needhichozhan 👋
+                Welcome, {name}👋
             </Typography>
             <Typography fontSize={{xs: 30, md: 40}} marginTop={5} fontWeight={800} align="center">
               Ready to Claim for your expenses?
