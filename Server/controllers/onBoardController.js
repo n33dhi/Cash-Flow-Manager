@@ -64,18 +64,17 @@ const Login = async (req, res) => {
 
     await UserDetail.save();
 
-    res.cookie("accesstoken", accessToken, { httpOnly: true, maxAge: 360000, secure: true });
-    // res.cookie("refreshtoken", refreshToken, {
-    //   maxAge: 30000,
-    //   httpOnly: true,
-    //   sameSite: "strict",
-    //   secure: true,
-    // });
+    // res.cookie("accesstoken", accessToken, { httpOnly: true, maxAge: 360000, secure: true });
+    res.cookie("refreshtoken", refreshToken, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    });
 
     res.status(200).json({
       status: "Login Success",
       // Login: true,
-      // token: accessToken,
+      token: accessToken,
       // refreshToken: refreshToken,
       //  Data: UserDetail,
     });
@@ -86,6 +85,43 @@ const Login = async (req, res) => {
     });
   }
 };
+
+const RefreshToken = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'Refresh token missing' });
+  }
+
+  try {
+    const user = await User.findOne({ "refreshToken.token": refreshToken });
+    if (!user) {
+      return res.status(403).json({ message: 'Invalid refresh token' });
+    }
+
+    const isTokenValid = await bcrypt.compare(refreshToken, user.refreshToken.token);
+    if (!isTokenValid) {
+      return res.status(403).json({ message: 'Invalid refresh token' });
+    }
+
+    jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN, (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ message: 'Invalid refresh token' });
+      }
+
+      const accessToken = jwt.sign(
+        { Id: user._id, UserName: user.userName, Email: user.email, Role: user.role },
+        process.env.JWT_ACCESS_TOKEN,
+        { expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN }
+      );
+
+      res.json({ accessToken });
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 
 const Logout = async (req, res) => {
   try {
@@ -144,5 +180,6 @@ module.exports = {
   RegisterUser,
   Login,
   Logout,
-  ForgetPassword
+  ForgetPassword,
+  RefreshToken
 };
