@@ -125,11 +125,11 @@ const RefreshToken = async (req, res) => {
 
 const Logout = async (req, res) => {
   try {
-    const { refreshToken } = req.body;
-    // const { refreshToken } = req.cookies.refreshToken;
+    // const { refreshToken } = req.body;
+    const { refreshToken } = req.cookies.refreshToken;
 
     if (!refreshToken)
-      return res.status(400).json({ message: "Refresh token not provided" });
+      return res.status(204).json({ message: "Refresh token not provided" });
 
     jwt.verify(
       refreshToken,
@@ -146,8 +146,8 @@ const Logout = async (req, res) => {
 
         user.refreshTokens = null
         await user.save();
-
-        // res.clearCookie("refreshToken");
+        
+        res.clearCookie('refreshToken', { httpOnly: true, secure: false});
         res.status(200).json({ message: "Logged out successfully" });
       }
     );
