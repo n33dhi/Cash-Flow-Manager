@@ -15,7 +15,7 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/forgetPassword" element={<ForgetPassword />}></Route>
           <Route path="/cashQuester/home" element={<Home />}></Route>
-          <Route path="/cashMaster/dahboard" element={<Dashboard />}></Route>
+          <Route path="/cashMaster/dashboard" element={<Dashboard />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
