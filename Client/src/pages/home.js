@@ -10,7 +10,7 @@ const Home = () => {
   // console.log(name)
   
   return (
-    <div style={{}}>
+    <div>
       <Navbar />
         <div 
         style={{ 
