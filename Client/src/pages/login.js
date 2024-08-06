@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, TextField, Button, Typography } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axiosConfig";
@@ -13,8 +13,21 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const role = useSelector((state) => state.auth.role);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (role) {
+      if (role.includes("admin")) {
+        navigate("/cashMaster/dashboard");
+      } else if (role.includes("employee")) {
+        navigate("/cashQuester/home");
+      } else {
+        navigate("/login");
+      }
+    }
+  }, [role, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,13 +37,11 @@ const Login = () => {
     }));
   };
 
-  const role = useSelector((state) => state.auth.role);
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(formData);
     try {
-      const response = await api.post("http://localhost:3001/login", formData);
+      const response = await api.post("/login", formData);
       // console.log("Response:", response.data);
 
       const { token } = response.data;
@@ -39,15 +50,16 @@ const Login = () => {
         dispatch(setTokenData(token)); //decodes the token and sets user data in Redux
         setAccessToken(token); //sets the token in memory
 
-        console.log("User role:", role);
+        // console.log("User role:", role);
 
-        if (role.includes("admin")) {
-          navigate("/cashMaster/dashboard");
-        } else if (role.includes("employee")) {
-          navigate("/cashQuester/home");
-        } else {
-          navigate("/login");
-        }
+        // if (role.includes("admin")) {
+        //   navigate("/cashMaster/dashboard");
+        // } else if (role.includes("employee")) {
+        //   navigate("/cashQuester/home");
+        // } else {
+        //   navigate("/login");
+        // }
+
       }
     } catch (err) {
       console.error("Error:", err.response ? err.response.data : err.message);
