@@ -15,7 +15,6 @@ const Login = () => {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const role = useSelector((state) => state.auth.role);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,6 +24,8 @@ const Login = () => {
     }));
   };
 
+  const role = useSelector((state) => state.auth.role);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(formData);
