@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import Axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { validatePassword } from "../Utilities/validation";
 
 import Logo from "../smiling man with palm up.svg";
 
@@ -23,43 +24,50 @@ const Register = () => {
   });
 
   const [errors, setErrors] = useState({
-    password: ''
+    password: "",
   });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
-  
-    // Password validation
-    if (name === 'password' && value.length < 6) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        password: 'Password must be at least 6 characters long.',
-      }));
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: '',
-      }));
-    }
+
+    
+      // Validate password field
+      if (name === 'password') {
+        const errorMessage = validatePassword(value);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: errorMessage,
+        }));
+      }
   };
-  
-  
+
   const navigate = useNavigate();
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+     // Perform validation for all fields
+     const passwordError = validatePassword(formData.password);
+
+     if (passwordError) {
+       setErrors((prevErrors) => ({
+         ...prevErrors,
+         password: passwordError,
+       }));
+       return; // Prevent form submission if there's a validation error
+     }
+
     // console.log(formData);
     await Axios.post("http://localhost:3001/register", formData)
       .then((response) => {
         // console.log(response);
         if (response.data.status) {
-            navigate("/login")
-        } 
+          navigate("/login");
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -67,15 +75,14 @@ const Register = () => {
   };
 
   return (
-<Box
+    <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         minHeight: "100vh",
-        // backgroundColor: "#f2f2f2",
-        p: { xs: 2, md: 0 },
+        p: { xs: 0, md: 0 },
       }}
     >
       <Box
@@ -84,19 +91,19 @@ const Register = () => {
           flexDirection: { xs: "column", md: "row" },
           alignItems: "center",
           justifyContent: "space-evenly",
-          margin: { xs: "0px 10px", md: "0px 60px" },
-          p: { xs: 3, md: 7 },
+          margin: { xs: "0px 0px", md: "0px 60px" },
+          p: { xs: 0, md: 7 },
           borderRadius: 2,
-          background: "#fff",
+          // background: "#fff",
           width: "100%",
-          boxShadow: "0 4px 16px 0 hsla(0, 0%, 9%, .1)",
           maxWidth: 1200,
-          gap: { xs: 3, md: 5 },
+          gap: { xs: 3, md: 10 },
         }}
       >
         <Box
           sx={{
             flex: 1,
+            display: { xs: "none", md: "block" }, // Hide on xs screens
             textAlign: { xs: "center", md: "flex-start" },
             mb: { xs: 3, md: 0 },
           }}
@@ -133,11 +140,32 @@ const Register = () => {
             }}
           />
         </Box>
-        <Box sx={{ flex: 1, width: { xs: "270px", md: "150px" } }}>
+
+        <Box
+          sx={{
+            flex: 1,
+            width: { xs: "270px", sm: '400px', md: "150px" },
+            boxShadow: {
+              xs: "none",
+              sm: "0 4px 16px 0 hsla(0, 0%, 9%, .1)",
+              md: "0 4px 16px 0 hsla(0, 0%, 9%, .1)"},
+            padding: "50px",
+            background: { xs: "none", sm:"#fff", md: "#fff" },
+            borderRadius: "5px",
+          }}
+        >
           <form
             onSubmit={handleSubmit}
             style={{ display: "flex", flexDirection: "column" }}
           >
+            <Typography
+              fontSize={24}
+              fontWeight={500}
+              mb={3}
+              style={{ textAlign: "left" }}
+            >
+              Signup
+            </Typography>
             <TextField
               label="Name"
               name="userName"
@@ -190,24 +218,27 @@ const Register = () => {
             </Button>
           </form>
           <Box sx={{ marginTop: 2, textAlign: "center" }}>
-        <Typography variant="body2" style={{ marginTop: "10px", textAlign:'initial' }}>
-          Have an Account? {" "}
-          <Link
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/login");
-            }}
-            style={{
-              textDecoration: "none",
-              color: "#32393d",
-              fontWeight: "800",
-            }}
-          >
-            Login
-          </Link>
-        </Typography>
-      </Box>
+            <Typography
+              variant="body2"
+              style={{ marginTop: "10px", textAlign: "initial" }}
+            >
+              Have an Account?{" "}
+              <Link
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/login");
+                }}
+                style={{
+                  textDecoration: "none",
+                  color: "#32393d",
+                  fontWeight: "800",
+                }}
+              >
+                Login
+              </Link>
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>
