@@ -9,7 +9,7 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import Axios from "axios";
+import api from "../api/axiosConfig";
 import { useNavigate, Link } from "react-router-dom";
 import { validatePassword } from "../Utilities/validation";
 
@@ -62,7 +62,7 @@ const Register = () => {
      }
 
     // console.log(formData);
-    await Axios.post("http://localhost:3001/register", formData)
+    await api.post("/register", formData)
       .then((response) => {
         // console.log(response);
         if (response.data.status) {
