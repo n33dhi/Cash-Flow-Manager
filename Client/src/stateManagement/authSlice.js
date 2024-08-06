@@ -17,7 +17,7 @@ const authSlice = createSlice({
         ...action.payload,
       };
     },
-    clearUserData: (state) => {
+    clearUserData: () => {
       return initialState;
     }
   },
@@ -37,7 +37,7 @@ export const setTokenData = (token) => (dispatch) => {
       email: decodedToken.Email || '',
       name: decodedToken.UserName || ''
     };
-    // console.log(userData);
+    console.log(userData);
     dispatch(setUserData(userData));
   } catch (error) {
     console.error('Error decoding token:', error);

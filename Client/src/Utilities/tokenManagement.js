@@ -1,14 +1,13 @@
-let accessToken = null;
-
 export const setAccessToken = (token) => {
-  accessToken = token;
+  window.accessToken = token;
 };
 
 export const getAccessToken = () => {
-  return accessToken;
+  return window.accessToken;
 };
 
+
 export const clearAccessToken = () => {
-  setAccessToken(null); 
+  delete window.accessToken; 
 };
 

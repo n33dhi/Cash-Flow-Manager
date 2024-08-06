@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getAccessToken, setAccessToken } from '../Utilities/tokenManagement'; 
+import { setAccessToken } from '../Utilities/tokenManagement'; 
 
 const api = axios.create({
   baseURL: 'http://localhost:3001',
@@ -23,7 +23,7 @@ const processQueue = (error, token = null) => {
 
 api.interceptors.request.use(
   config => {
-    const token = getAccessToken();
+    const token = window.accessToken;
     if (token) {
       config.headers['Authorization'] = 'Bearer ' + token;
     }

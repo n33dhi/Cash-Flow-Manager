@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
-import store from "./stateManagement/store";
+import store, { persistor } from "./stateManagement/store";
+import { PersistGate } from 'redux-persist/integration/react';
 import App from "./App";
 import { ThemeProvider } from "@emotion/react";
 import Theme from "../src/themes/theme";
@@ -12,7 +13,9 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={Theme}>
       <Provider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </ThemeProvider>
   </React.StrictMode>
