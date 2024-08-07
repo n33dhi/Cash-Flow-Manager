@@ -54,6 +54,7 @@ const Login = async (req, res) => {
       process.env.JWT_REFRESH_TOKEN,
       { expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN }
     );
+    
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
 
     UserDetail.refreshTokens = {
@@ -94,12 +95,19 @@ const RefreshToken = async (req, res) => {
   }
 
   try {
-    const user = await User.findOne({ "refreshToken.token": refreshToken });
+    const decoded = jwt.decode(refreshToken);
+    if (!decoded || !decoded.Id) {
+      return res.status(403).json({ message: 'Invalid refresh token' });
+    }
+    const userId = decoded.Id;
+    const user = await User.findById(userId);
+
+    // const user = await User.findOne({ 'refreshTokens.token': refreshToken });
     if (!user) {
       return res.status(403).json({ message: 'Invalid refresh token' });
     }
 
-    const isTokenValid = await bcrypt.compare(refreshToken, user.refreshToken.token);
+    const isTokenValid = await bcrypt.compare(refreshToken, user.refreshTokens.token);
     if (!isTokenValid) {
       return res.status(403).json({ message: 'Invalid refresh token' });
     }

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
 
 const initialState = {
+  id: '',
   role: '' ,
   email: '',
   name: ''
@@ -33,11 +34,12 @@ export const setTokenData = (token) => (dispatch) => {
   try {
     const decodedToken = jwtDecode(token);
     const userData = {
+      id: decodedToken.Id || '',
       role: decodedToken.Role || '',
       email: decodedToken.Email || '',
       name: decodedToken.UserName || ''
     };
-    console.log(userData);
+    // console.log(userData);
     dispatch(setUserData(userData));
   } catch (error) {
     console.error('Error decoding token:', error);
