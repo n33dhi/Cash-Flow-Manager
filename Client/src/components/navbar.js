@@ -15,6 +15,7 @@ import api from "../api/axiosConfig";
 import { clearAccessToken } from "../Utilities/tokenManagement";
 import { useDispatch, useSelector } from "react-redux";
 import { clearUserData } from "../stateManagement/authSlice";
+import Cookies from 'js-cookie';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ const Navbar = () => {
   const handleLogout = () => {
     setAnchorEl(null);
     clearAccessToken();
+    Cookies.remove('refreshToken', { path: '/' });
 
     try {
       api.post("/logout");
