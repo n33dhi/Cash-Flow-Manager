@@ -52,6 +52,13 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
+  const handleRequests = () => {
+    navigate("/cashMaster/requests");
+    setAnchorEl(null);
+  }
+
+  const handleClick = role === "admin" ? handleRequests : handleHistory;
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -130,7 +137,7 @@ const Navbar = () => {
               color="#ff3434"
               fontWeight={800}
               fontSize={16}
-              onClick={handleHistory}
+              onClick={handleClick}
               sx={{
                 color: "#32393d",
                 cursor: "pointer",

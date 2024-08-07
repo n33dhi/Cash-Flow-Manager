@@ -9,7 +9,6 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import Navbar from "../components/navbar";
 import img from "../Sign up form.svg";
 import api from "../api/axiosConfig";
 import { useSelector } from "react-redux";
@@ -47,7 +46,6 @@ const RequestForm = () => {
 
   return (
     <>
-      <Navbar />
       <div
         style={{
           display: "flex",
