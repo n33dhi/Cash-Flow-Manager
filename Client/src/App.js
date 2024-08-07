@@ -5,18 +5,20 @@ import Login from "./pages/login";
 import Dashboard from "./pages/dashboard";
 import Home from "./pages/home";
 import ForgetPassword from "./pages/forgotPassword";
+import RequestForm from "./pages/request";
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Routes>
-          <Route path="/register" element={<Register />}></Route>
-          <Route path="/login" element={<Login />}></Route>
-          <Route path="/forgetPassword" element={<ForgetPassword />}></Route>
-          <Route path="/cashQuester/home" element={<Home />}></Route>
-          <Route path="/cashMaster/dashboard" element={<Dashboard />}></Route>
-        </Routes>
+          <Routes>
+            <Route path="/register" element={<Register />}></Route>
+            <Route path="/login" element={<Login />}></Route>
+            <Route path="/forgetPassword" element={<ForgetPassword />}></Route>
+            <Route path="/cashQuester/home" element={<Home />}></Route>
+            <Route path="cashQuester/request" element={<RequestForm />}></Route>
+            <Route path="/cashMaster/dashboard" element={<Dashboard />}></Route>
+          </Routes>
       </BrowserRouter>
     </div>
   );

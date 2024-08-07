@@ -5,7 +5,7 @@ const RequestSchema = new mongoose.Schema({
     description: {type: String, required: true},
     amount: { type: Number, required: true},
     category: { type: String, required: true, enum: [
-        'travel', 'office supplies', 'stationery', 'employee reimbursements', 'employee lunch'], default: 'travel'},
+        'travel', 'office supplies', 'employee reimbursements'], default: 'travel'},
     status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
     approvedBy: { type: String, required: true},
 }, {
