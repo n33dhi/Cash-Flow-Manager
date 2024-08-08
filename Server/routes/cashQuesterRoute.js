@@ -8,7 +8,7 @@ const AuthController = require("../middlewares/authorize");
 router.use(AuthController(['employee']));
 
 router.post("/newRequest", NewRequest);
-router.get("/history", History);
+router.post("/history", History);
 router.delete("/history/:id", DeleteRequest); 
 
 module.exports = router;
