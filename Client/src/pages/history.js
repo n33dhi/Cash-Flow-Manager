@@ -12,13 +12,13 @@ const HistoryPage = () => {
   return (
     <Box
       sx={{
-        mt: 15, 
+        marginTop: isMobile ? '100px' : '110px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: isMobile ? 'center' : 'flex-start',
         gap: 5,
         px: isMobile ? 2 : 0, 
-        marginBottom: '50px'
+        marginBottom: '30px'
       }}
     >
       <Box

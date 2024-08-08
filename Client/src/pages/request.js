@@ -170,7 +170,7 @@ const RequestForm = () => {
                     <MenuItem value={"Office Supplies"}>
                       Office Supplies
                     </MenuItem>
-                    <MenuItem value={"Employee reimbursements"}>
+                    <MenuItem value={"Employee Reimbursements"}>
                       Employee Reimbursements
                     </MenuItem>
                   </Select>
