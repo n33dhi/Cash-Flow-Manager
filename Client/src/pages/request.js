@@ -166,12 +166,12 @@ const RequestForm = () => {
                     onChange={handleChange}
                     required
                   >
-                    <MenuItem value={"travel"}>Travel</MenuItem>
-                    <MenuItem value={"office supplies"}>
+                    <MenuItem value={"Travel"}>Travel</MenuItem>
+                    <MenuItem value={"Office Supplies"}>
                       Office Supplies
                     </MenuItem>
-                    <MenuItem value={"employee reimbursements"}>
-                      Employee Reimbursementss
+                    <MenuItem value={"Employee reimbursements"}>
+                      Employee Reimbursements
                     </MenuItem>
                   </Select>
                 </FormControl>
