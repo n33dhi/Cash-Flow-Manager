@@ -12,8 +12,7 @@ import {
 import img from "../Sign up form.svg";
 import api from "../api/axiosConfig";
 import { useSelector } from "react-redux";
-
-
+import { useNavigate } from "react-router-dom";
 
 const RequestForm = () => {
   const role = useSelector((state) => state.auth.id);
@@ -33,12 +32,14 @@ const RequestForm = () => {
     }));
   };
 
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log(formData);
     try {
       const response = await api.post("/cashQuester/newRequest", formData);
-      console.log("Response:", response.data);
+      // console.log("Response:", response.data);
+      navigate("/cashQuester/history");
     } catch (err) {
       console.error("Error:", err.response ? err.response.data : err.message);
     }
