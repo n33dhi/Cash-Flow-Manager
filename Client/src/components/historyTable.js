@@ -63,7 +63,7 @@ const HistoryTable = () => {
     let filteredRequests = [...requests];
 
     if (searchQuery) {
-      filteredRequests = filteredRequests.filter(request => 
+      filteredRequests = filteredRequests.filter(request =>
         `PW-${request.requestId}`.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
@@ -128,8 +128,15 @@ const HistoryTable = () => {
     return sortedRequests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   }, [sortedRequests, page, rowsPerPage]);
 
+  const statusCounts = useMemo(() => {
+    return Object.keys(statusChips).reduce((counts, status) => {
+      counts[status] = requests.filter(request => request.status === status).length;
+      return counts;
+    }, {});
+  }, [requests]);
+
   const MemoizedTable = useMemo(() => (
-    <TableContainer component={Paper} style={{ overflowX: 'auto', backgroundColor:'#fff' }} >
+    <TableContainer component={Paper} style={{ overflowX: 'auto', backgroundColor: '#fff' }}>
       <Table>
         <TableHead>
           <TableRow>
@@ -142,7 +149,7 @@ const HistoryTable = () => {
                 Claim ID
               </TableSortLabel>
             </TableCell>
-            <TableCell>Date</TableCell>
+            {!isMobile && <TableCell>Date</TableCell>}
             {!isMobile && <TableCell>Description</TableCell>}
             {!isMobile && <TableCell>Amount</TableCell>}
             {!isMobile && <TableCell>Category</TableCell>}
@@ -155,7 +162,7 @@ const HistoryTable = () => {
             paginatedRequests.map((request) => (
               <TableRow key={request._id} onClick={() => handleRowClick(request)}>
                 <TableCell>{`PW-${request.requestId}`}</TableCell>
-                <TableCell>{formatDate(request.createdAt)}</TableCell>
+                {!isMobile && <TableCell>{formatDate(request.createdAt)}</TableCell>}
                 {!isMobile && <StyledTableCell>{request.description}</StyledTableCell>}
                 {!isMobile && <TableCell>{request.amount}</TableCell>}
                 {!isMobile && <TableCell>{request.category}</TableCell>}
@@ -193,32 +200,42 @@ const HistoryTable = () => {
 
   return (
     <Container>
-      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: isMobile ? 'flex-start' : 'space-between', alignItems: isMobile ? 'flex-start' : 'center', marginBottom: '30px', gap: isMobile ? '14px' : '0' }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        justifyContent: isMobile ? 'flex-start' : 'space-between',
+        alignItems: isMobile ? 'flex-start' : 'center',
+        marginBottom: '30px',
+        gap: isMobile ? '14px' : '0'
+      }}>
         <TextField
           label="Search by Claim ID"
           variant="outlined"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          sx={{ 
-            marginRight: isMobile ? '0' : 'auto', 
-            width: '250px', 
-            borderRadius: '8px' 
+          sx={{
+            width: '100%',
+            maxWidth: isMobile ? '100%' : '350px',
+            borderRadius: '10px'
           }}
         />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
         <Typography marginRight={2} fontWeight={700}>Sort by</Typography>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           {Object.keys(statusChips).map((status) => (
             <Chip
-            key={status}
-            label={statusChips[status].label}
-            color={statusFilter === status ? statusChips[status].color : getStatusChipColor(status)}
-            onClick={() => handleStatusFilter(status)}
-            sx={{ cursor: 'pointer', backgroundColor: 'white', '&:hover': {
-              backgroundColor: 'white', // Prevent hover effect
-              boxShadow: getStatusChipColor(status), // Remove any shadow on hover
-            }, }}
-            icon={<CircleIcon />}
-          />          
+              key={status}
+              label={`${statusChips[status].label} (${statusCounts[status]})`}
+              color={getStatusChipColor(status)}
+              onClick={() => handleStatusFilter(status)}
+              sx={{
+                cursor: 'pointer',
+                backgroundColor: 'white',
+                '&:hover': {
+                  backgroundColor: 'white', // Prevent hover effect
+                }
+              }}
+              icon={<CircleIcon />}
+            />
           ))}
         </div>
       </div>
@@ -230,7 +247,12 @@ const HistoryTable = () => {
       )}
 
       {selectedRequest && (
-        <Dialog open={true} onClose={handleCloseModal}>
+        <Dialog
+          open={true}
+          onClose={handleCloseModal}
+          fullWidth
+          maxWidth="md"
+        >
           <DialogTitle>Request Details</DialogTitle>
           <DialogContent>
             <Typography variant="body1"><strong>Claim ID:</strong> {`PW-${selectedRequest.requestId}`}</Typography>

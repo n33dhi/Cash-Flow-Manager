@@ -1,28 +1,34 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import api from '../api/axiosConfig';
-import { Table, Container, CircularProgress, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, TextField, TablePagination, useTheme, useMediaQuery, IconButton } from '@mui/material';
+import {
+  Table, Container, CircularProgress, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper, Chip, Dialog, DialogTitle, DialogContent,
+  DialogActions, Button, Typography, TextField, TablePagination, useTheme,
+  useMediaQuery, IconButton
+} from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
-import MoreVertIcon from '@mui/icons-material/MoreVert'; 
-import { useNavigate } from 'react-router-dom'; 
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedUser, setSelectedUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [roleFilter, setRoleFilter] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const response = await api.get('/cashMaster/users');
       const usersData = response.data.data;
-      // console.log(usersData);
       setUsers(usersData);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -64,15 +70,14 @@ const UserTable = () => {
   };
 
   const handleMoreDetails = (userId) => {
-    console.log(userId);
-    navigate(`/cashMaster/user/${userId}`); 
+    navigate(`/cashMaster/user/${userId}`);
   };
 
   const paginatedUsers = useMemo(() => {
-    return users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-  }, [users, page, rowsPerPage]);
+    return users.filter(user => !roleFilter || user.role === roleFilter)
+      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  }, [users, page, rowsPerPage, roleFilter]);
 
-  // console.log(users.email)
   const getRoleChipColor = (role) => {
     switch (role) {
       case 'admin':
@@ -81,6 +86,24 @@ const UserTable = () => {
         return 'secondary';
       default:
         return 'default';
+    }
+  };
+
+  const handleRoleFilter = (role) => {
+    setRoleFilter(prevRole => (prevRole === role ? '' : role));
+  };
+
+  const role = useSelector((state) => state.auth.id);
+  const currentUserId = role; 
+
+  const roleChips = {
+    admin: {
+      label: `Admin (${users.filter(user => user.role === 'admin').length})`,
+      color: 'error',
+    },
+    employee: {
+      label: `Employee (${users.filter(user => user.role === 'employee').length})`,
+      color: 'secondary',
     }
   };
 
@@ -100,7 +123,11 @@ const UserTable = () => {
         <TableBody>
           {paginatedUsers.length > 0 ? (
             paginatedUsers.map((user) => (
-              <TableRow key={user._id} onClick={() => handleRowClick(user)}>
+              <TableRow
+                key={user._id}
+                onClick={() => handleRowClick(user)}
+                selected={user._id === currentUserId}
+              >
                 <TableCell>{`PW-${user.userId}`}</TableCell>
                 <TableCell>{user.userName}</TableCell>
                 { !isMobile && <TableCell>{user.email}</TableCell> }
@@ -109,7 +136,7 @@ const UserTable = () => {
                     label={user.role}
                     color={getRoleChipColor(user.role)}
                     icon={<CircleIcon />}
-                    style={{ cursor: 'default', maxWidth:'120px' }}
+                    style={{ cursor: 'default', maxWidth: '120px' }}
                   />
                 </TableCell> }
                 {!isMobile && <TableCell>{user.requests ? user.requests.length : 0}</TableCell>}
@@ -143,7 +170,14 @@ const UserTable = () => {
 
   return (
     <Container>
-      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: isMobile ? 'flex-start' : 'space-between', alignItems: isMobile ? 'flex-start' : 'center', marginBottom: '30px', gap: isMobile ? '14px' : '0' }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        justifyContent: isMobile ? 'flex-start' : 'space-between',
+        alignItems: isMobile ? 'flex-start' : 'center',
+        marginBottom: '30px',
+        gap: isMobile ? '14px' : '0'
+      }}>
         <TextField
           label="Search by User ID"
           variant="outlined"
@@ -151,6 +185,22 @@ const UserTable = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
           sx={{ width: '250px', borderRadius: '8px', marginRight: isMobile ? '0' : 'auto', }}
         />
+        <Typography marginRight={2} fontWeight={700}>Sort by</Typography>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          {Object.keys(roleChips).map((role) => (
+            <Chip
+              key={role}
+              label={roleChips[role].label}
+              color={getRoleChipColor(role)}
+              onClick={() => handleRoleFilter(role)}
+              sx={{ cursor: 'pointer', backgroundColor: 'white', '&:hover': {
+                backgroundColor: 'white', // Prevent hover effect
+                boxShadow: getRoleChipColor(role), // Remove any shadow on hover
+              }, }}
+              icon={<CircleIcon />}
+            />
+          ))}
+        </div>
       </div>
 
       {loading ? (
@@ -167,10 +217,10 @@ const UserTable = () => {
             <Typography variant="body1"><strong>Username:</strong> {selectedUser.username}</Typography>
             <Typography variant="body1"><strong>Email:</strong> {selectedUser.email}</Typography>
             <Typography variant="body1"><strong>Role:</strong> {selectedUser.role}</Typography>
-            <Typography variant="body1"><strong>Total Amount Claimed:</strong> {selectedUser.totalAmount}</Typography>
+            {/* <Typography variant="body1"><strong>Total Amount Claimed:</strong> {selectedUser.totalAmount}</Typography> */}
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCloseModal} variant='contained'>
+            <Button onClick={handleCloseModal} variant="contained">
               Close
             </Button>
           </DialogActions>

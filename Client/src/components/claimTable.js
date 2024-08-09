@@ -20,6 +20,7 @@ import {
   DialogTitle,
   Button,
   Chip,
+  TableSortLabel, // Import TableSortLabel for sorting
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import EditIcon from "@mui/icons-material/Edit";
@@ -35,6 +36,8 @@ function ClaimTable() {
   const [selectedClaimId, setSelectedClaimId] = useState(null);
   const [selectedStatus, setSelectedStatus] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [sortDirection, setSortDirection] = useState("asc"); // New state for sorting direction
+  const [sortField, setSortField] = useState("requestId"); // New state for sorting field
   const { userId } = useParams();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -44,9 +47,17 @@ function ClaimTable() {
       try {
         const response = await api.get(`/cashMaster/claims/${userId}`);
         if (Array.isArray(response.data)) {
-          setClaims(response.data);
-          setTotalClaims(response.data.length);
-          const initialStatusMap = response.data.reduce((acc, claim) => {
+          let sortedClaims = response.data;
+          if (sortField) {
+            sortedClaims = [...sortedClaims].sort((a, b) => {
+              if (a[sortField] < b[sortField]) return sortDirection === "asc" ? -1 : 1;
+              if (a[sortField] > b[sortField]) return sortDirection === "asc" ? 1 : -1;
+              return 0;
+            });
+          }
+          setClaims(sortedClaims);
+          setTotalClaims(sortedClaims.length);
+          const initialStatusMap = sortedClaims.reduce((acc, claim) => {
             acc[claim._id] = claim.status;
             return acc;
           }, {});
@@ -60,7 +71,7 @@ function ClaimTable() {
     };
 
     fetchClaims();
-  }, [userId, page, rowsPerPage]);
+  }, [userId, page, rowsPerPage, sortField, sortDirection]);
 
   const handleStatusChange = async () => {
     try {
@@ -101,6 +112,12 @@ function ClaimTable() {
     setPage(0);
   };
 
+  const handleSort = (field) => {
+    const isAsc = sortField === field && sortDirection === "asc";
+    setSortDirection(isAsc ? "desc" : "asc");
+    setSortField(field);
+  };
+
   const getStatusChipColor = (status) => {
     switch (status) {
       case "Pending":
@@ -124,7 +141,15 @@ function ClaimTable() {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Claim ID</TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={sortField === "requestId"}
+                  direction={sortField === "requestId" ? sortDirection : "asc"}
+                  onClick={() => handleSort("requestId")}
+                >
+                  Claim ID
+                </TableSortLabel>
+              </TableCell>
               {!isMobile && <TableCell>Date</TableCell>}
               <TableCell>Description</TableCell>
               {!isMobile && <TableCell>Amount</TableCell>}
@@ -195,7 +220,7 @@ function ClaimTable() {
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>Change Status</DialogTitle>
         <DialogContent>
-          <FormControl fullWidth>
+          <FormControl fullWidth size="small">
             <Select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
