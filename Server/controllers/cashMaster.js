@@ -23,6 +23,16 @@ const AllUsers = async (req, res) => {
   }
 };
 
+const SingleUser = async (req, res) => {
+  try {
+    const { id } = req.params
+    const userDetail = await User.findById(id);
+    res.status(200).json({ status: "Success", data: userDetail });
+  } catch (e) {
+    res.status(500).send({ message: e.message });
+  }
+};
+
 const DeleteUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -48,9 +58,29 @@ const UpdateRequest = async (req, res) => {
   }
 };
 
+const GetClaims = async(req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const findById = await Request.find({ requester: id }).lean();
+    if (!findById) {
+      return res.status(404).send("no record");
+    }
+
+    res.status(200).json(findById);
+  } catch (e) {
+    res.status(500).send({message: e.message});
+  }
+};
+
 module.exports = {
   Dashboard,
   AllUsers,
+  SingleUser,
   DeleteUser,
   UpdateRequest,
+  GetClaims
 };
