@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   Box,
@@ -22,7 +22,7 @@ function UserDetail() {
   const navigate = useNavigate();
   const currentUserId = useSelector((state) => state.auth.id);
 
-  const componentRef = useRef();
+  // const componentRef = useRef();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -105,7 +105,7 @@ function UserDetail() {
           <Link to={"/cashMaster/users"} style={{ textDecoration: "none" }}>
             PettyWallet Users{" "}
           </Link>
-          <span style={{ margin: "0 8px" }}> &gt; </span> {userData.userId}
+          <span style={{ margin: "0 8px" }}> &gt; </span> PWU-{userData.userId}
         </Typography>
         <Box>
           <Button
@@ -214,7 +214,6 @@ function UserDetail() {
                 padding: "2px 8px",
                 borderRadius: "8px",
                 backgroundColor: theme.palette.success.main,
-                backdropFilter: "blur(10px)",
               }}
             >
               <Typography fontSize={14}>
