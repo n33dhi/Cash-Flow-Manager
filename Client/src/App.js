@@ -13,6 +13,7 @@ const History = lazy(() => import('./pages/history.js'));
 const Dashboard = lazy(() => import('./pages/dashboard.js'));
 const Users = lazy(() => import('./pages/users.js'));
 const Requests = lazy(() => import('./pages/requests.js'));
+const UserDetail = lazy(() => import('./pages/userDetail.js'));
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               <Route path="/cashQuester/history" element={<AuthenticatedRoute><MainLayout><History /></MainLayout></AuthenticatedRoute>} />
               <Route path="/cashMaster/dashboard" element={<AuthenticatedRoute><MainLayout><Dashboard /></MainLayout></AuthenticatedRoute>} />
               <Route path="/cashMaster/users" element={<AuthenticatedRoute><MainLayout><Users /></MainLayout></AuthenticatedRoute>} />
+              <Route path="/cashMaster/user/:userId" element={<AuthenticatedRoute><MainLayout><UserDetail /></MainLayout></AuthenticatedRoute>} />
               <Route path="/cashMaster/requests" element={<AuthenticatedRoute><MainLayout><Requests /></MainLayout></AuthenticatedRoute>} />
               <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
