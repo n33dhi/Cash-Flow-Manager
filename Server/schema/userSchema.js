@@ -1,4 +1,9 @@
 const mongoose = require("mongoose");
+const crypto = require('crypto');
+
+const generateShortId = () => {
+    return crypto.randomBytes(2).toString('hex').toUpperCase().slice(0, 3); 
+  };
 
 const RefreshTokenSchema = new mongoose.Schema({
   token: { type: String, required: true },
@@ -7,6 +12,7 @@ const RefreshTokenSchema = new mongoose.Schema({
 });
 
 const UserSchema = new mongoose.Schema({
+  userId: { type: String, default: generateShortId, unique: true},
   userName: { type: String, required: true, unique: true},
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true }, 
