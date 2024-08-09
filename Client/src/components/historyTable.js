@@ -129,7 +129,7 @@ const HistoryTable = () => {
   }, [sortedRequests, page, rowsPerPage]);
 
   const MemoizedTable = useMemo(() => (
-    <TableContainer component={Paper} style={{ overflowX: 'auto' }}>
+    <TableContainer component={Paper} style={{ overflowX: 'auto', backgroundColor:'#fff' }} >
       <Table>
         <TableHead>
           <TableRow>
