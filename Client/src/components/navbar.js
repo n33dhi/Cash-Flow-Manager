@@ -57,7 +57,9 @@ const Navbar = () => {
     setAnchorEl(null);
   }
 
-  const handleClick = role === "admin" ? handleRequests : handleHistory;
+  // const handleClick = role === "admin" ? handleRequests : handleHistory;
+//   console.log("Current Role:", role);
+// console.log("Handle Click Function:", handleClick);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -137,7 +139,7 @@ const Navbar = () => {
               color="#ff3434"
               fontWeight={800}
               fontSize={16}
-              onClick={handleClick}
+              onClick={ role === 'admin' ? handleRequests : handleHistory}
               sx={{
                 color: "#32393d",
                 cursor: "pointer",
