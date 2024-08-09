@@ -46,6 +46,23 @@ const History = async(req, res) => {
   }
 };
 
+const UserDetails = async(req, res) => {
+  try {
+    const { userId } = req.body;
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+    const userDetail = await User.findById(userId);
+    if (!userDetail) {
+      return res.status(404).send("no record");
+    }
+
+    res.status(200).json(userDetail);
+  } catch (e) {
+    res.status(500).send({message: e.message});
+  }
+};
+
 const DeleteRequest = async (req, res) => {
   try {
     const { id } = req.params;
@@ -99,5 +116,6 @@ module.exports = {
   NewRequest,
   History,
   DeleteRequest,
+  UserDetails
   // UpdateRequest,
 };
