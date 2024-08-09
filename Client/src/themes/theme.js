@@ -1,6 +1,20 @@
 import { createTheme } from "@mui/material/styles";
 
 const Theme = createTheme({
+  palette: {
+    primary: {
+      main: "#32393d", // Replace with your actual primary color
+    },
+    secondary: {
+      main: "#ff3434", 
+    },
+    background: {
+      paper: "#f2f2f2", // Background for card, if needed
+    },
+    text: {
+      primary: "#32393d",
+    },
+  },
   typography: {
     fontFamily: ["Nunito", "sans-serif"].join(","),
   },
@@ -24,15 +38,20 @@ const Theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         head: {
-          fontSize: '20px',
+          fontSize: '16px',
           fontWeight: '700',
+          '@media (min-width:600px)': {
+            fontSize: '20px',
+          },
         },
         body: {
-          fontSize: '16px',
+          fontSize: '14px',
           fontWeight: '500',
+          '@media (min-width:600px)': { 
+            fontSize: '16px',
         },
       },
-    },
+    }},
     MuiChip: {
       styleOverrides: {
         root: {
@@ -69,6 +88,13 @@ const Theme = createTheme({
             color: '#FF3434',
           },
         },
+        colorSecondary: {
+          backgroundColor: 'rgba(151, 71, 255, 0.20)',
+          color: '#9747FF',
+          '& .MuiChip-icon': {
+            color: '#9747FF',
+          }
+        }
       },
     },
   },
