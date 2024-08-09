@@ -189,7 +189,7 @@ function ClaimTable() {
                         }
                         sx={{ padding: 0, height: 28 }} // Same height as Chip
                       >
-                        <EditIcon />
+                        {/* <EditIcon /> */}
                       </IconButton>
                     </Box>
                   </TableCell>
@@ -217,8 +217,8 @@ function ClaimTable() {
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
-      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Change Status</DialogTitle>
+      {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+        <DialogTitle>Update Status</DialogTitle>
         <DialogContent>
           <FormControl fullWidth size="small">
             <Select
@@ -244,7 +244,7 @@ function ClaimTable() {
             Save
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
     </Box>
   );
 }
