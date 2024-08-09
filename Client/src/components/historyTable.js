@@ -2,9 +2,10 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import api from '../api/axiosConfig';
 import {
-  Table, Container, CircularProgress, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, TextField, TablePagination, TableSortLabel
+  Table, Container, CircularProgress, TableBody, InputAdornment, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, TextField, TablePagination, TableSortLabel
 } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
+import SearchIcon from '@mui/icons-material/Search';
 import { styled, useTheme } from '@mui/material/styles';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -216,7 +217,13 @@ const HistoryTable = () => {
           sx={{
             width: '100%',
             maxWidth: isMobile ? '100%' : '350px',
-            borderRadius: '10px'
+          }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
           }}
         />
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>

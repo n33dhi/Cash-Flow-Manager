@@ -74,6 +74,14 @@ const Home = () => {
       >
         Welcome, {userData.userName}👋
       </Typography>
+      <Typography
+        fontSize={{ xs: 30, md: 40 }}
+        marginTop={2}
+        fontWeight={800}
+        align="center"
+      >
+        Ready to Claim for your expenses?
+      </Typography>
       <Box>
         <Box
           sx={{
@@ -145,14 +153,6 @@ const Home = () => {
           </Box>
         </Box>
       </Box>
-      <Typography
-        fontSize={{ xs: 30, md: 40 }}
-        marginTop={5}
-        fontWeight={800}
-        align="center"
-      >
-        Ready to Claim for your expenses?
-      </Typography>
       <Typography fontSize={20} marginTop={4} fontWeight={400} align="center">
         Let us help you streamline the process.
       </Typography>
@@ -160,7 +160,7 @@ const Home = () => {
         type="submit"
         variant="contained"
         onClick={handleRequest}
-        sx={{ mt: { xs: 5, md: 7 }, padding: "10px 50px" }}
+        sx={{ mt: { xs: 5, md: 5 }, padding: "10px 50px" }}
       >
         Request
       </Button>
