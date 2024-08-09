@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { Box, Typography, Button, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Button,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import PersonIcon from "@mui/icons-material/Person";
 import api from "../api/axiosConfig";
 import ClaimTable from "../components/claimTable";
@@ -10,6 +16,7 @@ function UserDetail() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [userData, setUserData] = useState(null);
+  const [amount, setAmount] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +30,33 @@ function UserDetail() {
     };
 
     fetchUserData();
+  }, [userId]);
+
+  useEffect(() => {
+    const fetchUserAmount = async () => {
+      try {
+        const response = await api.get(`/cashMaster/claims/${userId}`);
+        const requests = response.data;
+
+        // Filter approved requests
+        const approvedRequests = requests.filter(
+          (request) => request.status === "Accepted"
+        );
+
+        // Sum the amount of approved requests
+        const totalAmount = approvedRequests.reduce(
+          (sum, request) => sum + request.amount,
+          0
+        );
+
+        setAmount(totalAmount);
+        // console.log(totalAmount);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserAmount();
   }, [userId]);
 
   const handleDeleteUser = async () => {
@@ -59,9 +93,14 @@ function UserDetail() {
           mb: 1,
         }}
       >
-       
-        <Typography sx={{ fontSize: { xs: "18px", md: "20px" }, fontWeight: 700 }} gutterBottom>
-        <Link to={'/cashMaster/users'} style={{textDecoration: 'none'}}>PettyWallet Users </Link><span style={{ margin: "0 8px" }}> &gt; </span> {userData.userName}
+        <Typography
+          sx={{ fontSize: { xs: "18px", md: "20px" }, fontWeight: 700 }}
+          gutterBottom
+        >
+          <Link to={"/cashMaster/users"} style={{ textDecoration: "none" }}>
+            PettyWallet Users{" "}
+          </Link>
+          <span style={{ margin: "0 8px" }}> &gt; </span> {userData.userName}
         </Typography>
         <Button
           variant="contained"
@@ -120,7 +159,11 @@ function UserDetail() {
             }}
           >
             <Typography fontSize={12}>
-              <strong>Date Joined:</strong> {new Date(userData.createdAt).toLocaleDateString()}
+              <strong>Date Joined:</strong>{" "}
+              {new Date(userData.createdAt).toLocaleDateString()}
+            </Typography>
+            <Typography fontSize={12}>
+              <strong>Claimed Amount:</strong> {amount.toLocaleString()} ₹
             </Typography>
           </Box>
 
