@@ -4,9 +4,10 @@ import {
   Table, Container, CircularProgress, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper, Chip, Dialog, DialogTitle, DialogContent,
   DialogActions, Button, Typography, TextField, TablePagination, useTheme,
-  useMediaQuery, IconButton
+  useMediaQuery, IconButton, InputAdornment
 } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
+import SearchIcon from '@mui/icons-material/Search';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -108,7 +109,7 @@ const UserTable = () => {
   };
 
   const MemoizedTable = useMemo(() => (
-    <TableContainer component={Paper} style={{ overflowX: 'auto' }}>
+    <TableContainer component={Paper} style={{ overflowX: 'auto', backgroundColor: '#fff' }}>
       <Table>
         <TableHead>
           <TableRow>
@@ -128,7 +129,7 @@ const UserTable = () => {
                 onClick={() => handleRowClick(user)}
                 selected={user._id === currentUserId}
               >
-                <TableCell>{`PW-${user.userId}`}</TableCell>
+                <TableCell>{`PWU-${user.userId}`}</TableCell>
                 <TableCell>{user.userName}</TableCell>
                 { !isMobile && <TableCell>{user.email}</TableCell> }
                 { !isMobile && <TableCell>
@@ -176,7 +177,7 @@ const UserTable = () => {
         justifyContent: isMobile ? 'flex-start' : 'space-between',
         alignItems: isMobile ? 'flex-start' : 'center',
         marginBottom: '30px',
-        gap: isMobile ? '14px' : '0'
+        gap: isMobile ? '14px' : '0',
       }}>
         <TextField
           label="Search by User ID"
@@ -184,6 +185,13 @@ const UserTable = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           sx={{ width: '250px', borderRadius: '8px', marginRight: isMobile ? '0' : 'auto', }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
         />
         <Typography marginRight={2} fontWeight={700}>Sort by</Typography>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -213,7 +221,7 @@ const UserTable = () => {
         <Dialog open={true} onClose={handleCloseModal}>
           <DialogTitle>User Details</DialogTitle>
           <DialogContent>
-            <Typography variant="body1"><strong>User ID:</strong> {`PW-${selectedUser.userId}`}</Typography>
+            <Typography variant="body1"><strong>User ID:</strong> {`PWU-${selectedUser.userId}`}</Typography>
             <Typography variant="body1"><strong>Username:</strong> {selectedUser.username}</Typography>
             <Typography variant="body1"><strong>Email:</strong> {selectedUser.email}</Typography>
             <Typography variant="body1"><strong>Role:</strong> {selectedUser.role}</Typography>

@@ -20,7 +20,8 @@ import {
   DialogTitle,
   Button,
   Chip,
-  TableSortLabel, // Import TableSortLabel for sorting
+  TableSortLabel,
+  Typography, // Import TableSortLabel for sorting
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import EditIcon from "@mui/icons-material/Edit";
@@ -133,6 +134,7 @@ function ClaimTable() {
 
   return (
     <Box marginTop={3}>
+      <Typography fontSize={20} fontWeight={700} marginBottom={3}>Claims</Typography>
       <TableContainer
         component={Paper}
         style={{ overflowX: "auto" }}

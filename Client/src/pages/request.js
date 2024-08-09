@@ -37,7 +37,7 @@ const RequestForm = () => {
     e.preventDefault();
     // console.log(formData);
     try {
-      const response = await api.post("/cashQuester/newRequest", formData);
+      await api.post("/cashQuester/newRequest", formData);
       // console.log("Response:", response.data);
       navigate("/cashQuester/history");
     } catch (err) {
