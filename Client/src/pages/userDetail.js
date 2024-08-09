@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   Box,
@@ -10,6 +10,7 @@ import {
 import PersonIcon from "@mui/icons-material/Person";
 import api from "../api/axiosConfig";
 import ClaimTable from "../components/claimTable";
+import { useSelector } from "react-redux";
 
 function UserDetail() {
   const { userId } = useParams();
@@ -17,7 +18,11 @@ function UserDetail() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [userData, setUserData] = useState(null);
   const [amount, setAmount] = useState(0);
+  const [claims, setClaims] = useState([]);
   const navigate = useNavigate();
+  const currentUserId = useSelector((state) => state.auth.id);
+
+  const componentRef = useRef();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -50,7 +55,7 @@ function UserDetail() {
         );
 
         setAmount(totalAmount);
-        // console.log(totalAmount);
+        setClaims(approvedRequests); // Store claims in state
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -100,19 +105,34 @@ function UserDetail() {
           <Link to={"/cashMaster/users"} style={{ textDecoration: "none" }}>
             PettyWallet Users{" "}
           </Link>
-          <span style={{ margin: "0 8px" }}> &gt; </span> {userData.userName}
+          <span style={{ margin: "0 8px" }}> &gt; </span> {userData.userId}
         </Typography>
-        <Button
-          variant="contained"
-          color="error"
-          onClick={handleDeleteUser}
-          sx={{
-            alignSelf: isMobile ? "flex-start" : "flex-end",
-            mt: isMobile ? 2 : 0,
-          }}
-        >
-          Delete User
-        </Button>
+        <Box>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={handleDeleteUser}
+            sx={{
+              alignSelf: isMobile ? "flex-start" : "flex-end",
+              mt: isMobile ? 2 : 0,
+            }}
+            disabled={userId === currentUserId}
+          >
+            Delete User
+          </Button>
+          {/* <Button
+            variant="contained"
+            color="primary"
+            // onClick={handlePrint}
+            sx={{
+              alignSelf: isMobile ? "flex-start" : "flex-end",
+              mt: isMobile ? 2 : 0,
+              ml: 2,
+            }}
+          >
+            Download PDF
+          </Button> */}
+        </Box>
       </Box>
 
       {/* Profile Card */}
@@ -186,25 +206,27 @@ function UserDetail() {
               position: "absolute",
               top: 16,
               left: 16,
+              textAlign: "left",
             }}
           >
-            <Typography sx={{ fontWeight: 700, fontSize: "16px" }}>
-              {userData.role === "admin" ? "Admin" : "Employee"}
-            </Typography>
-            <Typography fontSize={12}>
-              <strong>User ID:</strong> {userData.userId}
-            </Typography>
+            <Box
+              sx={{
+                padding: "2px 8px",
+                borderRadius: "8px",
+                backgroundColor: theme.palette.success.main,
+                backdropFilter: "blur(10px)",
+              }}
+            >
+              <Typography fontSize={14}>
+                {userData.role === "admin" ? "Admin" : "Employee"}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Box>
 
-      {/* Claims Section */}
-      <Box>
-        <Typography fontSize={20} fontWeight={700} marginTop={4}>
-          Claims
-        </Typography>
-        <ClaimTable />
-      </Box>
+
+      <ClaimTable/>
     </Box>
   );
 }
