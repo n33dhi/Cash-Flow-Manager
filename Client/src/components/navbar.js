@@ -14,8 +14,8 @@ import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axiosConfig";
 import { clearAccessToken } from "../Utilities/tokenManagement";
 import { useDispatch, useSelector } from "react-redux";
-import { clearUserData } from "../stateManagement/authSlice";
 import Cookies from 'js-cookie';
+import { clearUserData } from "../stateManagement/authSlice";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -48,18 +48,13 @@ const Navbar = () => {
   };
 
   const handleHistory = () => {
-    navigate("/cashQuester/history");
+    if (role === "admin") {
+      navigate("/cashMaster/requests");
+    } else {
+      navigate("/cashQuester/history");
+    }
     setAnchorEl(null);
   };
-
-  const handleRequests = () => {
-    navigate("/cashMaster/requests");
-    setAnchorEl(null);
-  }
-
-  // const handleClick = role === "admin" ? handleRequests : handleHistory;
-//   console.log("Current Role:", role);
-// console.log("Handle Click Function:", handleClick);
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -139,7 +134,7 @@ const Navbar = () => {
               color="#ff3434"
               fontWeight={800}
               fontSize={16}
-              onClick={ role === 'admin' ? handleRequests : handleHistory}
+              onClick={handleHistory}
               sx={{
                 color: "#32393d",
                 cursor: "pointer",
