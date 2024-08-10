@@ -14,6 +14,19 @@ const Dashboard = async (req, res) => {
   }
 };
 
+const NewRequest = async (req, res) => {
+  try {
+    const now = new Date();
+    const last24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const newRequests = await Request.find({
+      createdAt: { $gte: last24Hours }
+  });
+  res.status(200).json(newRequests);
+  } catch (e) {
+    res.status(500).send({message: e.message})
+  }
+}
+
 const AllUsers = async (req, res) => {
   try {
     const allUsers = await User.find({});
@@ -82,5 +95,6 @@ module.exports = {
   SingleUser,
   DeleteUser,
   UpdateRequest,
-  GetClaims
+  GetClaims,
+  NewRequest
 };
