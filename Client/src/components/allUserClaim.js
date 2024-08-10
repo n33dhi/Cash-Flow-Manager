@@ -24,7 +24,7 @@ const AllUserClaimTable = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortedRequests, setSortedRequests] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [statusToEdit, setStatusToEdit] = useState('');
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
@@ -202,6 +202,7 @@ const AllUserClaimTable = () => {
             {!isMobile && <TableCell>Employee</TableCell>}
             {!isMobile && <TableCell>Amount</TableCell>}
             {!isMobile && <TableCell>Category</TableCell>}
+            {!isMobile && <TableCell>Approved By</TableCell>}
             <TableCell>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Typography fontSize={{ xs: 16, md: 20 }} fontWeight={700} style={{ marginRight: '8px' }}>
@@ -223,6 +224,7 @@ const AllUserClaimTable = () => {
                 {!isMobile && <TableCell>{request.requester}</TableCell>}
                 {!isMobile && <TableCell>{request.amount}</TableCell>}
                 {!isMobile && <TableCell>{request.category}</TableCell>}
+                {!isMobile && <TableCell>{request.approvedBy}</TableCell>}
                 <TableCell>
                   <Chip
                     label={request.status}
