@@ -1,129 +1,144 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, Typography, Box, Divider, Button } from "@mui/material";
-import { AccountBalanceWallet as WalletIcon, RequestQuote as RequestIcon, TrendingUp as TrendIcon } from "@mui/icons-material";
-import { useSelector } from "react-redux";
-import api from "../api/axiosConfig";
+import React from 'react';
+import useDashboardData from '../hooks/totalAmount';
+
+import { Card, CardContent, Typography, Stack, Box } from '@mui/material';
+import UsersIcon from '@mui/icons-material/People';
+import ClaimsIcon from '@mui/icons-material/Checklist';
+import AmountIcon from '@mui/icons-material/MonetizationOn';
+import MonthIcon from '@mui/icons-material/Event';
+
+const AnalyticsCard = ({ icon, title, value, chipLabel, cardStyle, valueColor, iconColor, iconFill }) => {
+  return (
+    <Card 
+      sx={{ 
+        width: 240, 
+        height: { xs: 100, md: 140 },
+        borderRadius: 3, 
+        padding: 2, 
+        textAlign: 'left', 
+        position: 'relative', 
+        overflow: 'hidden', 
+        ...cardStyle 
+      }}
+    >
+      <CardContent 
+        sx={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          justifyContent: 'space-between', 
+          height: '100%', 
+          padding: 0 
+        }}
+      >
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <Typography variant="body2" sx={{ fontSize: 18 }}>
+            {chipLabel}
+          </Typography>
+          <Box 
+            sx={{ 
+              width: 41, 
+              height: 41, 
+              borderRadius: '10px', 
+              background: iconColor,
+              boxShadow: `0px 4px 12px 0px ${iconColor}`,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {React.cloneElement(icon, { sx: { fontSize: 20, color: iconFill } })}
+          </Box>
+        </Box>
+        <Box sx={{ marginTop: 'auto' }}>
+          <Typography variant="h6" sx={{ fontSize: 20, fontWeight: 'bold', color: valueColor }}>
+            {value}
+          </Typography>
+          <Typography variant="body2" sx={{ fontSize: 14, color: 'gray' }}>
+            {title}
+          </Typography>
+        </Box>
+      </CardContent>
+    </Card>
+  );
+};
 
 const DashboardCards = () => {
-  const userId = useSelector((state) => state.auth.userId);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [monthlyAmount, setMonthlyAmount] = useState(0);
-  const [requestStatus, setRequestStatus] = useState({
-    pending: 0,
-    approved: 0,
-    declined: 0,
-  });
-  const [recentActivity, setRecentActivity] = useState({
-    lastRequestDate: "",
-    lastLogin: "",
-  });
 
-  useEffect(() => {
-    // Fetch data for total amount processed
-    const fetchTotalAmount = async () => {
-      try {
-        const response = await api.get(`/cashMaster/user/${userId}/totalAmount`);
-        setTotalAmount(response.data.totalAmount);
-      } catch (error) {
-        console.error("Error fetching total amount:", error);
-      }
-    };
-
-    // Fetch data for this month's spending
-    const fetchMonthlyAmount = async () => {
-      try {
-        const response = await api.get(`/cashMaster/user/${userId}/monthlyAmount`);
-        setMonthlyAmount(response.data.monthlyAmount);
-      } catch (error) {
-        console.error("Error fetching monthly amount:", error);
-      }
-    };
-
-    // Fetch request status data
-    const fetchRequestStatus = async () => {
-      try {
-        const response = await api.get(`/cashMaster/user/${userId}/requestStatus`);
-        setRequestStatus(response.data);
-      } catch (error) {
-        console.error("Error fetching request status:", error);
-      }
-    };
-
-    // Fetch recent activity data
-    const fetchRecentActivity = async () => {
-      try {
-        const response = await api.get(`/cashMaster/user/${userId}/recentActivity`);
-        setRecentActivity(response.data);
-      } catch (error) {
-        console.error("Error fetching recent activity:", error);
-      }
-    };
-
-    fetchTotalAmount();
-    fetchMonthlyAmount();
-    fetchRequestStatus();
-    fetchRecentActivity();
-  }, [userId]);
+  const { totalAmountProcessed, claimsProcessedThisMonth, amountSpentThisMonth, totalClaims, claimsThisMonth } = useDashboardData();
 
   return (
-    <Box display="flex" flexDirection="row" gap={3} flexWrap="wrap">
-      {/* Request Status Card */}
-      <Card sx={{ width: 300, backgroundColor: '#1976d2', color: '#fff', borderRadius: 2, p: 2, boxShadow: 3 }}>
-        <CardContent>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <RequestIcon sx={{ fontSize: 40 }} />
-            <Typography variant="h6" fontWeight="bold">
-              Request Status
-            </Typography>
-          </Box>
-          <Divider sx={{ my: 2, bgcolor: '#ffffff80' }} />
-          <Box mt={2}>
-            <Typography>Pending: {requestStatus.pending}</Typography>
-            <Typography>Approved: {requestStatus.approved}</Typography>
-            <Typography>Declined: {requestStatus.declined}</Typography>
-          </Box>
-        </CardContent>
-      </Card>
-
-      {/* Total Amount Processed Card */}
-      <Card sx={{ width: 300, backgroundColor: '#2e7d32', color: '#fff', borderRadius: 2, p: 2, boxShadow: 3 }}>
-        <CardContent>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <WalletIcon sx={{ fontSize: 40 }} />
-            <Typography variant="h6" fontWeight="bold">
-              Total Amount Processed
-            </Typography>
-          </Box>
-          <Divider sx={{ my: 2, bgcolor: '#ffffff80' }} />
-          <Box mt={2}>
-            <Typography>Total Amount: ${totalAmount}</Typography>
-            <Typography>This Month: ${monthlyAmount}</Typography>
-          </Box>
-          <Box mt={2}>
-            <Button variant="contained" sx={{ bgcolor: '#ffffff20', color: '#fff' }}>
-              Show This Month's Spending
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
-
-      {/* Recent Activity Card */}
-      <Card sx={{ width: 300, backgroundColor: '#d32f2f', color: '#fff', borderRadius: 2, p: 2, boxShadow: 3 }}>
-        <CardContent>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            <TrendIcon sx={{ fontSize: 40 }} />
-            <Typography variant="h6" fontWeight="bold">
-              Recent Activity
-            </Typography>
-          </Box>
-          <Divider sx={{ my: 2, bgcolor: '#ffffff80' }} />
-          <Box mt={2}>
-            <Typography>Last Request: {recentActivity.lastRequestDate}</Typography>
-            <Typography>Last Login: {recentActivity.lastLogin}</Typography>
-          </Box>
-        </CardContent>
-      </Card>
-    </Box>
+    <Stack 
+      direction="row" 
+      spacing={3} 
+      sx={{ 
+        marginLeft: '12px',
+        gap: { xs: '20px', md: '2px' }, 
+        flexDirection: { xs: 'column', md: 'row' }, 
+        alignItems: { xs: 'baseline', md: 'center' },
+        margin: { xs: '0px', md: '12px' } 
+      }}
+    >
+      <AnalyticsCard
+        icon={<AmountIcon />}
+        title="Total Amount Processed"
+        value={totalAmountProcessed !== null ? `₹${totalAmountProcessed.toLocaleString()}` : 'Loading...'}
+        chipLabel="Total Amount"
+        valueColor="rgba(151, 71, 255, 1)"
+        iconColor="rgba(151, 71, 255, 0.20)"
+        iconFill="rgba(151, 71, 255, 1)"
+        cardStyle={{
+          boxShadow: '0 4px 12px 0 rgba(151, 71, 255, .2)',
+          background: 'rgba(151, 71, 255, 0.05)',
+          borderBottom: '3px solid rgba(151, 71, 255, .2)',
+          borderRight: '3px solid rgba(151, 71, 255, .2)',
+        }}
+      />
+      <AnalyticsCard
+        icon={<MonthIcon />}
+        title="Amount Spend this Month"
+        value={amountSpentThisMonth !== null ? `₹${amountSpentThisMonth.toLocaleString()}` : 'Loading...'}
+        chipLabel="This Month"
+        valueColor="rgba(71,255,67,1)"
+        iconColor="rgba(71,255,67,0.20)"
+        iconFill="rgba(71,255,67,1)"
+        cardStyle={{
+          boxShadow: '0 4px 12px 0 rgba(71,255,67,.2)',
+          background: 'rgba(71,255,67,.05)',
+          borderBottom: '3px solid rgba(71,255,67,.2)',
+          borderRight: '3px solid rgba(71,255,67,.2)',
+        }}
+      />
+      <AnalyticsCard
+        icon={<ClaimsIcon />}
+        title="Total Claims"
+        value={totalClaims !== null ? totalClaims : 'Loading...'}
+        chipLabel="Claims"
+        valueColor="rgba(25, 118, 210, 1)"
+        iconColor="rgba(25, 118, 210, 0.20)"
+        iconFill="rgba(25, 118, 210, 1)"
+        cardStyle={{
+          boxShadow: '0 4px 12px 0 rgba(25, 118, 210, .2)',
+          background: 'rgba(25, 118, 210, 0.05)',
+          borderBottom: '3px solid rgba(25, 118, 210, .2)',
+          borderRight: '3px solid rgba(25, 118, 210, .2)',
+        }}
+      />
+      <AnalyticsCard
+        icon={<UsersIcon />}
+        title="Number of Users"
+        value={claimsThisMonth !== null ? claimsThisMonth : 'Loading...'}
+        chipLabel="Active"
+        valueColor="rgba(255, 52, 52, 1)"
+        iconColor="rgba(255, 52, 52, 0.20)"
+        iconFill="rgba(255, 52, 52, 1)"
+        cardStyle={{
+          boxShadow: '0 4px 12px 0 rgba(255, 52, 52, .2)',
+          background: 'rgba(255, 52, 52, 0.05)',
+          borderBottom: '3px solid rgba(255, 52, 52, .2)',
+          borderRight: '3px solid rgba(255, 52, 52, .2)',
+        }}
+      />
+    </Stack>
   );
 };
 

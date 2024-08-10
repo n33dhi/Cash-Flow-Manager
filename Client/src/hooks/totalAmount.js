@@ -1,0 +1,67 @@
+// hooks/useDashboardData.js
+import { useState, useEffect } from 'react';
+import api from '../api/axiosConfig';
+
+const useDashboardData = () => {
+  const [totalAmountProcessed, setTotalAmountProcessed] = useState(null);
+  const [claimsProcessedThisMonth, setClaimsProcessedThisMonth] = useState(null);
+  const [amountSpentThisMonth, setAmountSpentThisMonth] = useState(null);
+  const [totalClaims, setTotalClaims] = useState(null);
+  const [claimsThisMonth, setClaimsThisMonth] = useState(null);
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const response = await api.get('/cashMaster/dashboard');
+        const requests = response.data.data; // Adjust according to the API response structure
+
+        // Calculate total amount processed
+        const totalAmount = requests
+          .filter(request => request.status === 'Accepted')
+          .reduce((acc, request) => acc + request.amount, 0);
+        setTotalAmountProcessed(totalAmount);
+
+        // Calculate claims processed this month
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const claimsThisMonth = requests
+          .filter(request => 
+            request.status === 'Accepted' && 
+            new Date(request.date) >= startOfMonth
+          ).length;
+        setClaimsProcessedThisMonth(claimsThisMonth);
+        console.log()
+
+        // Calculate amount spent this month
+        const amountSpent = requests
+          .filter(request => 
+            request.status === 'Accepted' && 
+            new Date(request.date) >= startOfMonth
+          )
+          .reduce((acc, request) => acc + request.amount, 0);
+        setAmountSpentThisMonth(amountSpent);
+
+        // Calculate total claims
+        const totalClaimsCount = requests.length;
+        setTotalClaims(totalClaimsCount);
+
+        // Calculate total claims this month
+        const totalClaimsThisMonth = requests
+          .filter(request => 
+            new Date(request.date) >= startOfMonth
+          ).length;
+        setClaimsThisMonth(totalClaimsThisMonth);
+        console.log(totalClaimsThisMonth)
+
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  return { totalAmountProcessed, claimsProcessedThisMonth, amountSpentThisMonth, totalClaims, claimsThisMonth };
+};
+
+export default useDashboardData;
