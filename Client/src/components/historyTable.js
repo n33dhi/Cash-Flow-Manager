@@ -31,7 +31,7 @@ const HistoryTable = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortedRequests, setSortedRequests] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10 );
 
   const userId = useSelector((state) => state.auth.id);
   const theme = useTheme();
@@ -258,7 +258,7 @@ const HistoryTable = () => {
           open={true}
           onClose={handleCloseModal}
           fullWidth
-          maxWidth="md"
+          maxWidth="xs"
         >
           <DialogTitle>Request Details</DialogTitle>
           <DialogContent>
