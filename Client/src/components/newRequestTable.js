@@ -149,7 +149,7 @@ const NewRequestsTable = () => {
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{padding:0}}>
       {loading ? (
         <CircularProgress />
       ) : (
