@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ErrorBoundary from './Utilities/errorBoundary';
 import AuthenticatedRoute from './Utilities/authenticateRoute';
 import MainLayout from './Utilities/mainLayout.js';
+import LoadingOverlay from './components/loading.js';
 
 const Register = lazy(() => import('./pages/register.js'));
 const Login = lazy(() => import('./pages/login.js'));
@@ -20,7 +21,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
         <ErrorBoundary>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<LoadingOverlay />}>
             <Routes>
               <Route path="/register" element={<Register />} />
               <Route path="/login" element={<Login />} />

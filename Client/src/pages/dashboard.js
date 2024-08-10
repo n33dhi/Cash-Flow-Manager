@@ -2,6 +2,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import { useTheme, useMediaQuery, Box } from '@mui/material';
 import { useSelector } from 'react-redux';
+import DashboardCards from '../components/dashboardCard';
 import NewRequestsTable from '../components/newRequestTable';
 
 const Dashboard = () => {
@@ -35,6 +36,7 @@ const Dashboard = () => {
           Hi, {name} 👋
         </Typography>
       </Box>
+      <DashboardCards />
       <Typography fontSize={20} fontWeight={700}>New Requests</Typography>
         <NewRequestsTable />
     </Box>
