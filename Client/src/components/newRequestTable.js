@@ -38,7 +38,9 @@ const NewRequestsTable = () => {
         requester: usernameMap[request.requester] || 'Unknown'
       }));
   
-      const filteredRequests = requestsWithUsernames.filter(request => request.requester !== 'Unknown');
+      const filteredRequests = requestsWithUsernames.filter(request => 
+        request.requester !== 'Unknown' && request.status === 'Pending'
+      );
   
       const sortedFilteredRequests = filteredRequests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
   
@@ -50,6 +52,7 @@ const NewRequestsTable = () => {
       setLoading(false);
     }
   }, []);
+  
   
 
   useEffect(() => {
@@ -90,24 +93,29 @@ const NewRequestsTable = () => {
         status: statusToEdit
       });
       setRequests(prevRequests =>
-        prevRequests.map(req =>
-          req._id === selectedRequest._id
-            ? { ...req, status: statusToEdit }
-            : req
-        )
+        prevRequests
+          .map(req =>
+            req._id === selectedRequest._id
+              ? { ...req, status: statusToEdit }
+              : req
+          )
+          .filter(req => req.status === 'Pending') 
       );
       setSortedRequests(prevRequests =>
-        prevRequests.map(req =>
-          req._id === selectedRequest._id
-            ? { ...req, status: statusToEdit }
-            : req
-        )
+        prevRequests
+          .map(req =>
+            req._id === selectedRequest._id
+              ? { ...req, status: statusToEdit }
+              : req
+          )
+          .filter(req => req.status === 'Pending') // filter out non-pending requests
       );
       setEditDialogOpen(false);
     } catch (error) {
       console.error("Error updating status:", error);
     }
   };
+  
 
   const handleCloseModal = () => {
     setSelectedRequest(null);
