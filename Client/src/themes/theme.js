@@ -3,13 +3,13 @@ import { createTheme } from "@mui/material/styles";
 const Theme = createTheme({
   palette: {
     primary: {
-      main: "#32393d", // Replace with your actual primary color
+      main: "#32393d",
     },
     secondary: {
       main: "#ff3434", 
     },
     background: {
-      paper: "#f2f2f2", // Background for card, if needed
+      paper: "#f2f2f2",
     },
     text: {
       primary: "#32393d",
@@ -44,20 +44,40 @@ const Theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         head: {
-          fontSize: '16px',
+          backgroundColor: "#f9fafb", 
+          fontSize: '14px',
           fontWeight: '700',
           '@media (min-width:600px)': {
-            fontSize: '20px',
+            fontSize: '18px',
           },
         },
         body: {
-          fontSize: '14px',
+          fontSize: '12px',
           fontWeight: '500',
           '@media (min-width:600px)': { 
             fontSize: '16px',
+          },
         },
       },
-    }},
+    },
+    MuiTableContainer: {
+      styleOverrides: {
+        root: {
+          borderRadius: "12px", 
+          overflow: "hidden", 
+          boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+        },
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: {
+          "&:hover": {
+            backgroundColor: "#f0f0f0", 
+          },
+        },
+      },
+    },
     MuiChip: {
       styleOverrides: {
         root: {
@@ -99,12 +119,11 @@ const Theme = createTheme({
           color: '#9747FF',
           '& .MuiChip-icon': {
             color: '#9747FF',
-          }
+          },
         }
       },
     },
   },
-  // Add responsive container styles
   spacing: 8, 
   breakpoints: {
     values: {

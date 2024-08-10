@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Container, Table, TableBody, TableCell, TableContainer, useMediaQuery, IconButton, TableHead, TableRow, Paper, CircularProgress, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControl, InputLabel, Select, MenuItem, Typography, Chip } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
-import CircleIcon from '@mui/icons-material/Circle';
-import { useTheme } from '@mui/material/styles';
-import api from '../api/axiosConfig';
+import EditIcon from "@mui/icons-material/Edit";
+import CircleIcon from "@mui/icons-material/Circle";
+import { useTheme } from "@mui/material/styles";
+import api from "../api/axiosConfig";
 
 const NewRequestsTable = () => {
   const [requests, setRequests] = useState([]);
@@ -13,25 +13,27 @@ const NewRequestsTable = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
-  const [statusToEdit, setStatusToEdit] = useState('');
+  const [statusToEdit, setStatusToEdit] = useState("");
 
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
   const [selectedDetailsRequest, setSelectedDetailsRequest] = useState(null);
 
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const fetchData = useCallback(async () => {
     try {
-      const response = await api.get('/cashMaster/newRequest');
+      const response = await api.get("/cashMaster/newRequest");
       const requestData = response.data;
-  
-      const requesterIds = [...new Set(requestData.map(request => request.requester))];
-  
+
+      const requesterIds = [
+        ...new Set(requestData.map((request) => request.requester)),
+      ];
+
       const usernameResponses = await Promise.all(
-        requesterIds.map(userId => api.get(`/cashMaster/user/${userId}`))
+        requesterIds.map((userId) => api.get(`/cashMaster/user/${userId}`))
       );
-  
+
       const usernameMap = usernameResponses.reduce((acc, res) => {
         if (res.data && res.data.data && res.data.data.userName) {
           const { _id, userName } = res.data.data;
@@ -39,18 +41,21 @@ const NewRequestsTable = () => {
         }
         return acc;
       }, {});
-  
-      const requestsWithUsernames = requestData.map(request => ({
+
+      const requestsWithUsernames = requestData.map((request) => ({
         ...request,
-        requester: usernameMap[request.requester] || 'Unknown'
+        requester: usernameMap[request.requester] || "Unknown",
       }));
-  
-      const filteredRequests = requestsWithUsernames.filter(request => 
-        request.requester !== 'Unknown' && request.status === 'Pending'
+
+      const filteredRequests = requestsWithUsernames.filter(
+        (request) =>
+          request.requester !== "Unknown" && request.status === "Pending"
       );
-  
-      const sortedFilteredRequests = filteredRequests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  
+
+      const sortedFilteredRequests = filteredRequests.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+
       setRequests(sortedFilteredRequests);
       setSortedRequests(sortedFilteredRequests);
       setLoading(false);
@@ -59,7 +64,7 @@ const NewRequestsTable = () => {
       setLoading(false);
     }
   }, []);
-  
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -79,8 +84,11 @@ const NewRequestsTable = () => {
   };
 
   const paginatedRequests = useMemo(() => {
-    return (sortedRequests && sortedRequests.length > 0)
-      ? sortedRequests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    return sortedRequests && sortedRequests.length > 0
+      ? sortedRequests.slice(
+          page * rowsPerPage,
+          page * rowsPerPage + rowsPerPage
+        )
       : [];
   }, [sortedRequests, page, rowsPerPage]);
 
@@ -93,27 +101,28 @@ const NewRequestsTable = () => {
   const handleUpdateStatus = async () => {
     if (!selectedRequest) return;
     try {
-      await api.put('/cashMaster/requests', {
+      await api.put("/cashMaster/requests", {
         id: selectedRequest._id,
-        status: statusToEdit
+        status: statusToEdit,
       });
-      setRequests(prevRequests =>
+      setRequests((prevRequests) =>
         prevRequests
-          .map(req =>
+          .map((req) =>
             req._id === selectedRequest._id
               ? { ...req, status: statusToEdit }
               : req
           )
-          .filter(req => req.status === 'Pending') 
+          .filter((req) => req.status === "Pending")
       );
-      setSortedRequests(prevRequests =>
-        prevRequests
-          .map(req =>
-            req._id === selectedRequest._id
-              ? { ...req, status: statusToEdit }
-              : req
-          )
-          .filter(req => req.status === 'Pending') // filter out non-pending requests
+      setSortedRequests(
+        (prevRequests) =>
+          prevRequests
+            .map((req) =>
+              req._id === selectedRequest._id
+                ? { ...req, status: statusToEdit }
+                : req
+            )
+            .filter((req) => req.status === "Pending") // filter out non-pending requests
       );
       setEditDialogOpen(false);
     } catch (error) {
@@ -128,14 +137,14 @@ const NewRequestsTable = () => {
 
   const getStatusChipColor = (status) => {
     switch (status) {
-      case 'Pending':
-        return 'primary';
-      case 'Accepted':
-        return 'success';
-      case 'Declined':
-        return 'error';
+      case "Pending":
+        return "primary";
+      case "Accepted":
+        return "success";
+      case "Declined":
+        return "error";
       default:
-        return 'default';
+        return "default";
     }
   };
 
@@ -145,7 +154,10 @@ const NewRequestsTable = () => {
         <CircularProgress />
       ) : (
         <>
-          <TableContainer component={Paper} style={{ overflowX: 'auto', backgroundColor: '#fff' }}>
+          <TableContainer
+            component={Paper}
+            style={{ overflowX: "auto", backgroundColor: "#fff" }}
+          >
             <Table>
               <TableHead>
                 <TableRow>
@@ -156,8 +168,12 @@ const NewRequestsTable = () => {
                   {!isMobile && <TableCell>Category</TableCell>}
                   {!isMobile && <TableCell>Approved By</TableCell>}
                   <TableCell>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography fontSize={{ xs: 16, md: 20 }} fontWeight={700} style={{ marginRight: '8px' }}>
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <Typography
+                        fontSize={{ xs: 16, md: 20 }}
+                        fontWeight={700}
+                        style={{ marginRight: "8px" }}
+                      >
                         Edit
                       </Typography>
                       <IconButton size="small">
@@ -168,50 +184,56 @@ const NewRequestsTable = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {paginatedRequests.map((request) => (
-                  <TableRow
-                    key={request._id}
-                    onClick={() => {
-                      setSelectedDetailsRequest(request);
-                      setDetailsDialogOpen(true);
-                    }}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {!isMobile && (
-                      <TableCell>{`PW-${request.requestId}`}</TableCell>
-                    )}
-                    {!isMobile && (
-                      <TableCell>{formatDate(request.createdAt)}</TableCell>
-                    )}
-                    <TableCell>{request.requester}</TableCell>
-                    <TableCell>{request.amount}</TableCell>
-                    {!isMobile && (
-                      <TableCell>{request.category}</TableCell>
-                    )}
-                    {!isMobile && (
-                      <TableCell>{request.approvedBy}</TableCell>
-                    )}
-                    <TableCell>
-                      <Chip
-                        label={request.status}
-                        sx={{
-                            cursor: 'pointer',
-                            backgroundColor: '#fff',
-                            border: '1px solid #ccc',
-                            '&:hover': {
-                              backgroundColor: '#f2f2f2'
-                            }
+                {paginatedRequests.length > 0 ? (
+                  paginatedRequests.map((request) => (
+                    <TableRow
+                      key={request._id}
+                      onClick={() => {
+                        setSelectedDetailsRequest(request);
+                        setDetailsDialogOpen(true);
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      {!isMobile && (
+                        <TableCell>{`PW-${request.requestId}`}</TableCell>
+                      )}
+                      {!isMobile && (
+                        <TableCell>{formatDate(request.createdAt)}</TableCell>
+                      )}
+                      <TableCell>{request.requester}</TableCell>
+                      <TableCell>{request.amount}</TableCell>
+                      {!isMobile && <TableCell>{request.category}</TableCell>}
+                      {!isMobile && <TableCell>{request.approvedBy}</TableCell>}
+                      <TableCell>
+                        <Chip
+                          label={request.status}
+                          sx={{
+                            cursor: "pointer",
+                            backgroundColor: "#fff",
+                            border: "1px solid #ccc",
+                            "&:hover": {
+                              backgroundColor: "#f2f2f2",
+                            },
                           }}
-                        onClick={(event) => {
-                          event.stopPropagation(); // Prevent row click event
-                          handleStatusClick(request);
-                        }}
-                        color={getStatusChipColor(request.status)}
-                        icon={<CircleIcon />}
-                      />
+                          onClick={(event) => {
+                            event.stopPropagation(); // Prevent row click event
+                            handleStatusClick(request);
+                          }}
+                          color={getStatusChipColor(request.status)}
+                          icon={<CircleIcon />}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={isMobile ? 3 : 6} align="center">
+                      <Typography variant="body1" color="textSecondary">
+                        No new records available
+                      </Typography>
                     </TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </TableContainer>
@@ -249,8 +271,16 @@ const NewRequestsTable = () => {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseModal} variant="contained">Cancel</Button>
-          <Button onClick={handleUpdateStatus} variant="contained" color="primary">Update</Button>
+          <Button onClick={handleCloseModal} variant="contained">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleUpdateStatus}
+            variant="contained"
+            color="primary"
+          >
+            Update
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -263,16 +293,37 @@ const NewRequestsTable = () => {
       >
         <DialogTitle>Request Details</DialogTitle>
         <DialogContent>
-          <Typography variant="body1"><strong>Claim ID:</strong> {`PW-${selectedDetailsRequest?.requestId}`}</Typography>
-          <Typography variant="body1"><strong>Date:</strong> {formatDate(selectedDetailsRequest?.createdAt)}</Typography>
-          <Typography variant="body1"><strong>Employee:</strong> {selectedDetailsRequest?.requester}</Typography>
-          <Typography variant="body1"><strong>Amount:</strong> {selectedDetailsRequest?.amount}</Typography>
-          <Typography variant="body1"><strong>Category:</strong> {selectedDetailsRequest?.category}</Typography>
-          <Typography variant="body1"><strong>Approved By:</strong> {selectedDetailsRequest?.approvedBy}</Typography>
-          <Typography variant="body1"><strong>Status:</strong> {selectedDetailsRequest?.status}</Typography>
+          <Typography variant="body1">
+            <strong>Claim ID:</strong>{" "}
+            {`PW-${selectedDetailsRequest?.requestId}`}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Date:</strong>{" "}
+            {formatDate(selectedDetailsRequest?.createdAt)}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Employee:</strong> {selectedDetailsRequest?.requester}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Amount:</strong> {selectedDetailsRequest?.amount}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Category:</strong> {selectedDetailsRequest?.category}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Approved By:</strong> {selectedDetailsRequest?.approvedBy}
+          </Typography>
+          <Typography variant="body1">
+            <strong>Status:</strong> {selectedDetailsRequest?.status}
+          </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDetailsDialogOpen(false)} variant="contained">Close</Button>
+          <Button
+            onClick={() => setDetailsDialogOpen(false)}
+            variant="contained"
+          >
+            Close
+          </Button>
         </DialogActions>
       </Dialog>
     </Container>

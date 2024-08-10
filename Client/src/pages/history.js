@@ -43,7 +43,7 @@ const HistoryPage = () => {
             alignSelf: isMobile ? 'initial' : 'initial',
           }}
         >
-          New Request
+          + Request
         </Button>
       </Box>
       <HistoryTable />

@@ -205,7 +205,7 @@ const AllUserClaimTable = () => {
             {!isMobile && <TableCell>Approved By</TableCell>}
             <TableCell>
               <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography fontSize={{ xs: 16, md: 20 }} fontWeight={700} style={{ marginRight: '8px' }}>
+                <Typography fontSize={{ xs: 14, md: 18 }} fontWeight={700} style={{ marginRight: '8px' }}>
                   Edit
                 </Typography>
                 <IconButton size="small">
@@ -218,7 +218,7 @@ const AllUserClaimTable = () => {
         <TableBody>
           {paginatedRequests.length > 0 ? (
             paginatedRequests.map((request) => (
-              <TableRow key={request._id} onClick={() => handleRowClick(request)}>
+              <TableRow key={request._id} onClick={() => handleRowClick(request)} style={{ cursor: 'pointer' }}>
                 <TableCell>{`PW-${request.requestId}`}</TableCell>
                 <TableCell>{formatDate(request.createdAt)}</TableCell>
                 {!isMobile && <TableCell>{request.requester}</TableCell>}
@@ -261,129 +261,127 @@ const AllUserClaimTable = () => {
 
   return (
     <Container maxWidth="lg">
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <>
-          <FormControl variant="outlined" sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, justifyContent:'space-between', marginBottom:'30px'}}>
-            <TextField
-              variant="outlined"
-              label="Search by name or claim ID"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              sx={{ width: '250px', borderRadius: '8px', marginRight: isMobile ? '0' : 'auto', }}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              }}
-            />
-                   <Box sx={{ display:{xs:'none', md:'flex'}, justifyContent: 'flex-end', marginBottom: '8px', alignItems:'center' }}>
-                <Typography fontSize={16} fontWeight={700} marginRight={2}>Sort by</Typography>
-                {Object.keys(statusChips).map((status) => (
-                <Chip
-                    key={status}
-                    label={`${statusChips[status].label} (${statusCounts[status] || 0})`}
-                    color={getStatusChipColor(status)}
-                    onClick={() => handleStatusFilter(status)}
-                    sx={{
-                    cursor: 'pointer',
-                    marginRight: '8px',
-                    border: statusFilter === status ? `2px solid ${theme.palette[statusChips[status].color].main}` : 'none',
-                    backgroundColor: '#fff',
-                    '&:hover': {
-                        backgroundColor: '#f2f2f2'
-                    }
-                    }}
-                />
-                ))}
-          </Box>
-          </FormControl>
+  <FormControl variant="outlined" sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, justifyContent:'space-between', marginBottom:'30px'}}>
+    <TextField
+      variant="outlined"
+      label="Search by name or claim ID"
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      sx={{ width: '250px', borderRadius: '8px', marginRight: isMobile ? '0' : 'auto', }}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon />
+          </InputAdornment>
+        ),
+      }}
+    />
+    <Box sx={{ display:{xs:'none', md:'flex'}, justifyContent: 'flex-end', marginBottom: '8px', alignItems:'center' }}>
+      <Typography fontSize={16} fontWeight={700} marginRight={2}>Sort by</Typography>
+      {Object.keys(statusChips).map((status) => (
+        <Chip
+          key={status}
+          label={`${statusChips[status].label} (${statusCounts[status] || 0})`}
+          color={getStatusChipColor(status)}
+          onClick={() => handleStatusFilter(status)}
+          sx={{
+            cursor: 'pointer',
+            marginRight: '8px',
+            border: statusFilter === status ? `2px solid ${theme.palette[statusChips[status].color].main}` : 'none',
+            backgroundColor: '#fff',
+            '&:hover': {
+              backgroundColor: '#f2f2f2'
+            }
+          }}
+        />
+      ))}
+    </Box>
+  </FormControl>
 
-          {MemoizedTable}
+  {loading ? (
+    <CircularProgress size={24} sx={{ marginTop: '30px' }} />
+  ) : (
+    MemoizedTable
+  )}
 
-          <TablePagination
-            component="div"
-            count={sortedRequests.length}
-            page={page}
-            onPageChange={handlePageChange}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleRowsPerPageChange}
-            rowsPerPageOptions={[5, 10, 15]}
-          />
+  <TablePagination
+    component="div"
+    count={sortedRequests.length}
+    page={page}
+    onPageChange={handlePageChange}
+    rowsPerPage={rowsPerPage}
+    onRowsPerPageChange={handleRowsPerPageChange}
+    rowsPerPageOptions={[5, 10, 15]}
+  />
 
-          {/* Details Modal */}
-          <Dialog
-            open={detailsDialogOpen}
-            onClose={handleCloseModal}
-            maxWidth="xs"
-            fullWidth
-          >
-            <DialogTitle>Request Details</DialogTitle>
-            <DialogContent>
-              <Typography variant="body1" gutterBottom>
-                <strong>Claim ID: </strong>{`PW-${selectedRequest?.requestId}`}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-              <strong>Employee: </strong>{selectedRequest?.requester}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-              <strong>Amount:</strong> {selectedRequest?.amount}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-              <strong>Date: </strong>{formatDate(selectedRequest?.createdAt)}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-              <strong>Category:</strong> {selectedRequest?.category}
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-              <strong>Status: </strong> {selectedRequest?.status}
-              </Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseModal} variant="contained">Close</Button>
-            </DialogActions>
-          </Dialog>
+  {/* Details Modal */}
+  <Dialog
+    open={detailsDialogOpen}
+    onClose={handleCloseModal}
+    maxWidth="xs"
+    fullWidth
+  >
+    <DialogTitle>Request Details</DialogTitle>
+    <DialogContent>
+      <Typography variant="body1" gutterBottom>
+        <strong>Claim ID: </strong>{`PW-${selectedRequest?.requestId}`}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        <strong>Employee: </strong>{selectedRequest?.requester}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        <strong>Amount:</strong> {selectedRequest?.amount}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        <strong>Date: </strong>{formatDate(selectedRequest?.createdAt)}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        <strong>Category:</strong> {selectedRequest?.category}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        <strong>Status: </strong> {selectedRequest?.status}
+      </Typography>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleCloseModal} variant="contained">Close</Button>
+    </DialogActions>
+  </Dialog>
 
-          {/* Edit Status Modal */}
-          <Dialog
-            open={editDialogOpen}
-            onClose={handleCloseModal}
-            maxWidth="xs"
-            fullWidth
-          >
-            <DialogTitle>Edit Request Status</DialogTitle>
-            <DialogContent>
-              <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={statusToEdit}
-                  onChange={(e) => setStatusToEdit(e.target.value)}
-                  label="Status"
-                >
-                  {Object.keys(statusChips).map((status) => (
-                    <MenuItem key={status} value={status}>
-                      {statusChips[status].label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseModal} variant="contained">Cancel</Button>
-              <Button
-                variant="contained"
-                onClick={() => handleUpdateStatus(statusToEdit)}
-              >
-                Update
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </>
-      )}
-    </Container>
+  {/* Edit Status Modal */}
+  <Dialog
+    open={editDialogOpen}
+    onClose={handleCloseModal}
+    maxWidth="xs"
+    fullWidth
+  >
+    <DialogTitle>Edit Request Status</DialogTitle>
+    <DialogContent>
+      <FormControl fullWidth variant="outlined" margin="normal">
+        <InputLabel>Status</InputLabel>
+        <Select
+          value={statusToEdit}
+          onChange={(e) => setStatusToEdit(e.target.value)}
+          label="Status"
+        >
+          {Object.keys(statusChips).map((status) => (
+            <MenuItem key={status} value={status}>
+              {statusChips[status].label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleCloseModal} variant="contained">Cancel</Button>
+      <Button
+        variant="contained"
+        onClick={() => handleUpdateStatus(statusToEdit)}
+      >
+        Update
+      </Button>
+    </DialogActions>
+  </Dialog>
+</Container>
   );
 };
 

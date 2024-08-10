@@ -98,6 +98,16 @@ function UserDetail() {
           mb: 1,
         }}
       >
+        <Box sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, justifyContent:'start'}}>
+        <Typography
+          sx={{ fontSize: { xs: "18px", md: "20px" }, fontWeight: 700 }}
+          gutterBottom
+        >
+          <Link to={"/cashMaster/dashboard"} style={{ textDecoration: "none" }}>
+            Dashboard{" "}
+          </Link>
+          <span style={{ margin: "0 8px" }}> &gt; </span>
+        </Typography>
         <Typography
           sx={{ fontSize: { xs: "18px", md: "20px" }, fontWeight: 700 }}
           gutterBottom
@@ -107,6 +117,8 @@ function UserDetail() {
           </Link>
           <span style={{ margin: "0 8px" }}> &gt; </span> PWU-{userData.userId}
         </Typography>
+        </Box>
+        
         <Box>
           <Button
             variant="contained"

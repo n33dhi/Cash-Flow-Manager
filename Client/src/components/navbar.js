@@ -42,6 +42,15 @@ const Navbar = () => {
     navigate("/login");
   };
 
+  const handleLinkClick = (e) => {
+    e.preventDefault();
+    if (role === 'admin') {
+      navigate('/cashMaster/dashboard');
+    } else if (role === 'employee') {
+      navigate('/cashQuester/home');
+    }
+  };
+
   const handleUsers = () => {
     navigate("/cashMaster/users");
     setAnchorEl(null);
@@ -82,10 +91,7 @@ const Navbar = () => {
           >
             <Link
               href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/");
-              }}
+              onClick={handleLinkClick}
               style={{
                 textDecoration: "none",
                 fontWeight: "800",
