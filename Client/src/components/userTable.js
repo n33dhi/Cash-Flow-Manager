@@ -2,20 +2,17 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import api from '../api/axiosConfig';
 import {
   Table, Container, CircularProgress, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper, Chip, Dialog, DialogTitle, DialogContent,
-  DialogActions, Button, Typography, TextField, TablePagination, useTheme,
-  useMediaQuery, IconButton, InputAdornment
+  TableHead, TableRow, Paper, Chip, Typography, TextField, TablePagination, 
+  useTheme, useMediaQuery, InputAdornment
 } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
 import SearchIcon from '@mui/icons-material/Search';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const UserTable = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedUser, setSelectedUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
   const [page, setPage] = useState(0);
@@ -62,15 +59,7 @@ const UserTable = () => {
     setPage(0);
   };
 
-  const handleRowClick = (user) => {
-    setSelectedUser(user);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedUser(null);
-  };
-
-  const handleMoreDetails = (userId) => {
+  const handleRowClick = (userId) => {
     navigate(`/cashMaster/user/${userId}`);
   };
 
@@ -117,8 +106,7 @@ const UserTable = () => {
             <TableCell>Username</TableCell>
             {!isMobile && <TableCell>Email</TableCell>}
             {!isMobile && <TableCell>Role</TableCell>}
-            {!isMobile && <TableCell>Requests</TableCell>}
-            <TableCell>Actions</TableCell>
+            {!isMobile && <TableCell>Claims</TableCell>}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -126,7 +114,8 @@ const UserTable = () => {
             paginatedUsers.map((user) => (
               <TableRow
                 key={user._id}
-                onClick={() => handleRowClick(user)}
+                onClick={() => handleRowClick(user._id)}
+                style={{ cursor: 'pointer' }}
                 selected={user._id === currentUserId}
               >
                 <TableCell>{`PWU-${user.userId}`}</TableCell>
@@ -141,11 +130,6 @@ const UserTable = () => {
                   />
                 </TableCell> }
                 {!isMobile && <TableCell>{user.requests ? user.requests.length : 0}</TableCell>}
-                <TableCell>
-                  <IconButton onClick={() => handleMoreDetails(user._id)} aria-label="more details">
-                    <MoreVertIcon />
-                  </IconButton>
-                </TableCell>
               </TableRow>
             ))
           ) : (
@@ -215,24 +199,6 @@ const UserTable = () => {
         <CircularProgress size={24} />
       ) : (
         MemoizedTable
-      )}
-
-      {selectedUser && (
-        <Dialog open={true} onClose={handleCloseModal}>
-          <DialogTitle>User Details</DialogTitle>
-          <DialogContent>
-            <Typography variant="body1"><strong>User ID:</strong> {`PWU-${selectedUser.userId}`}</Typography>
-            <Typography variant="body1"><strong>Username:</strong> {selectedUser.username}</Typography>
-            <Typography variant="body1"><strong>Email:</strong> {selectedUser.email}</Typography>
-            <Typography variant="body1"><strong>Role:</strong> {selectedUser.role}</Typography>
-            {/* <Typography variant="body1"><strong>Total Amount Claimed:</strong> {selectedUser.totalAmount}</Typography> */}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseModal} variant="contained">
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
       )}
     </Container>
   );
