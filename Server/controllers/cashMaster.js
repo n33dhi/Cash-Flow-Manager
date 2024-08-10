@@ -17,9 +17,9 @@ const Dashboard = async (req, res) => {
 const NewRequest = async (req, res) => {
   try {
     const now = new Date();
-    const last24Hours = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
     const newRequests = await Request.find({
-      createdAt: { $gte: last24Hours }
+      createdAt: { $gte: threeDaysAgo }
   });
   res.status(200).json(newRequests);
   } catch (e) {
