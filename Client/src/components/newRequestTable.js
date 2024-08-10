@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Container, Table, TableBody, TableCell, TableContainer, IconButton, TableHead, TableRow, Paper, CircularProgress, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControl, InputLabel, Select, MenuItem, Typography, Chip } from '@mui/material';
+import { Container, Table, TableBody, TableCell, TableContainer, useMediaQuery, IconButton, TableHead, TableRow, Paper, CircularProgress, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControl, InputLabel, Select, MenuItem, Typography, Chip } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import CircleIcon from '@mui/icons-material/Circle';
+import { useTheme } from '@mui/material/styles';
 import api from '../api/axiosConfig';
 
 const NewRequestsTable = () => {
@@ -9,10 +10,16 @@ const NewRequestsTable = () => {
   const [sortedRequests, setSortedRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [statusToEdit, setStatusToEdit] = useState('');
+
+  const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
+  const [selectedDetailsRequest, setSelectedDetailsRequest] = useState(null);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const fetchData = useCallback(async () => {
     try {
@@ -53,8 +60,6 @@ const NewRequestsTable = () => {
     }
   }, []);
   
-  
-
   useEffect(() => {
     fetchData();
   }, [fetchData]);
@@ -115,7 +120,6 @@ const NewRequestsTable = () => {
       console.error("Error updating status:", error);
     }
   };
-  
 
   const handleCloseModal = () => {
     setSelectedRequest(null);
@@ -145,42 +149,52 @@ const NewRequestsTable = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Claim ID</TableCell>
-                  <TableCell>Date</TableCell>
+                  {!isMobile && <TableCell>Claim ID</TableCell>}
+                  {!isMobile && <TableCell>Date</TableCell>}
                   <TableCell>Employee</TableCell>
                   <TableCell>Amount</TableCell>
-                  <TableCell>Category</TableCell>
-                  <TableCell>Approved By</TableCell>
+                  {!isMobile && <TableCell>Category</TableCell>}
+                  {!isMobile && <TableCell>Approved By</TableCell>}
                   <TableCell>
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography fontSize={{ xs: 16, md: 20 }} fontWeight={700} style={{ marginRight: '8px' }}>
-                  Edit
-                </Typography>
-                <IconButton size="small">
-                  <EditIcon />
-                </IconButton>
-              </div>
-            </TableCell>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <Typography fontSize={{ xs: 16, md: 20 }} fontWeight={700} style={{ marginRight: '8px' }}>
+                        Edit
+                      </Typography>
+                      <IconButton size="small">
+                        <EditIcon />
+                      </IconButton>
+                    </div>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {paginatedRequests.length > 0 ? (
-                  paginatedRequests.map((request) => (
-                    <TableRow key={request._id}>
+                {paginatedRequests.map((request) => (
+                  <TableRow
+                    key={request._id}
+                    onClick={() => {
+                      setSelectedDetailsRequest(request);
+                      setDetailsDialogOpen(true);
+                    }}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {!isMobile && (
                       <TableCell>{`PW-${request.requestId}`}</TableCell>
+                    )}
+                    {!isMobile && (
                       <TableCell>{formatDate(request.createdAt)}</TableCell>
-                      <TableCell>{request.requester}</TableCell>
-                      <TableCell>{request.amount}</TableCell>
+                    )}
+                    <TableCell>{request.requester}</TableCell>
+                    <TableCell>{request.amount}</TableCell>
+                    {!isMobile && (
                       <TableCell>{request.category}</TableCell>
+                    )}
+                    {!isMobile && (
                       <TableCell>{request.approvedBy}</TableCell>
-                      <TableCell>
-                        <Chip
-                          label={request.status}
-                          onClick={() => handleStatusClick(request)}
-                          color={getStatusChipColor(request.status)}
-                          icon={<CircleIcon />}
-                        //   maxWidth="xs"
-                          sx={{
+                    )}
+                    <TableCell>
+                      <Chip
+                        label={request.status}
+                        sx={{
                             cursor: 'pointer',
                             backgroundColor: '#fff',
                             border: '1px solid #ccc',
@@ -188,64 +202,79 @@ const NewRequestsTable = () => {
                               backgroundColor: '#f2f2f2'
                             }
                           }}
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={6} style={{ textAlign: 'center' }}>
-                      No new requests found
+                        onClick={(event) => {
+                          event.stopPropagation(); // Prevent row click event
+                          handleStatusClick(request);
+                        }}
+                        color={getStatusChipColor(request.status)}
+                        icon={<CircleIcon />}
+                      />
                     </TableCell>
                   </TableRow>
-                )}
+                ))}
               </TableBody>
             </Table>
-            <TablePagination
-              component="div"
-              count={sortedRequests.length}
-              page={page}
-              onPageChange={handlePageChange}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              rowsPerPageOptions={[5, 10, 15]}
-            />
           </TableContainer>
-
-          {/* Edit Status Modal */}
-          <Dialog
-            open={editDialogOpen}
-            onClose={handleCloseModal}
-            maxWidth="xs"
-            fullWidth
-          >
-            <DialogTitle>Edit Request Status</DialogTitle>
-            <DialogContent>
-              <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Status</InputLabel>
-                <Select
-                  value={statusToEdit}
-                  onChange={(e) => setStatusToEdit(e.target.value)}
-                  label="Status"
-                >
-                  <MenuItem value="Pending">Pending</MenuItem>
-                  <MenuItem value="Accepted">Accepted</MenuItem>
-                  <MenuItem value="Declined">Declined</MenuItem>
-                </Select>
-              </FormControl>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleCloseModal} variant="contained">Cancel</Button>
-              <Button
-                variant="contained"
-                onClick={handleUpdateStatus}
-              >
-                Update
-              </Button>
-            </DialogActions>
-          </Dialog>
+          <TablePagination
+            component="div"
+            count={sortedRequests.length}
+            page={page}
+            onPageChange={handlePageChange}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleRowsPerPageChange}
+          />
         </>
       )}
+
+      {/* Edit Status Modal */}
+      <Dialog
+        open={editDialogOpen}
+        onClose={handleCloseModal}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>Edit Request Status</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth margin="normal" variant="outlined">
+            <InputLabel>Status</InputLabel>
+            <Select
+              value={statusToEdit}
+              onChange={(e) => setStatusToEdit(e.target.value)}
+              label="Status"
+            >
+              <MenuItem value="Pending">Pending</MenuItem>
+              <MenuItem value="Accepted">Accepted</MenuItem>
+              <MenuItem value="Declined">Declined</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} variant="contained">Cancel</Button>
+          <Button onClick={handleUpdateStatus} variant="contained" color="primary">Update</Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Request Details Modal */}
+      <Dialog
+        open={detailsDialogOpen}
+        onClose={() => setDetailsDialogOpen(false)}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>Request Details</DialogTitle>
+        <DialogContent>
+          <Typography variant="body1"><strong>Claim ID:</strong> {`PW-${selectedDetailsRequest?.requestId}`}</Typography>
+          <Typography variant="body1"><strong>Date:</strong> {formatDate(selectedDetailsRequest?.createdAt)}</Typography>
+          <Typography variant="body1"><strong>Employee:</strong> {selectedDetailsRequest?.requester}</Typography>
+          <Typography variant="body1"><strong>Amount:</strong> {selectedDetailsRequest?.amount}</Typography>
+          <Typography variant="body1"><strong>Category:</strong> {selectedDetailsRequest?.category}</Typography>
+          <Typography variant="body1"><strong>Approved By:</strong> {selectedDetailsRequest?.approvedBy}</Typography>
+          <Typography variant="body1"><strong>Status:</strong> {selectedDetailsRequest?.status}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDetailsDialogOpen(false)} variant="contained">Close</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
