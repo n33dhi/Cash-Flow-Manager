@@ -100,11 +100,11 @@ const UserTable = () => {
   const roleChips = {
     admin: {
       label: `Admin (${users.filter(user => user.role === 'admin').length})`,
-      color: 'error',
+      color: 'secondary',
     },
     employee: {
       label: `Employee (${users.filter(user => user.role === 'employee').length})`,
-      color: 'secondary',
+      color: 'user',
     }
   };
 
@@ -204,7 +204,7 @@ const UserTable = () => {
               sx={{ cursor: 'pointer', backgroundColor: 'white', '&:hover': {
                 backgroundColor: 'white', // Prevent hover effect
                 boxShadow: getRoleChipColor(role), // Remove any shadow on hover
-              }, }}
+              }, border: roleFilter === role ? `2px solid ${theme.palette[roleChips[role].color].main}` : 'none',}}
               icon={<CircleIcon />}
             />
           ))}

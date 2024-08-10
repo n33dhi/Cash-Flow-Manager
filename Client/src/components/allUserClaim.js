@@ -10,7 +10,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import { styled, useTheme } from '@mui/material/styles';
 
 const statusChips = {
-  Pending: { label: 'Pending', color: 'primary' },
+  Pending: { label: 'Pending', color: 'user2' },
   Accepted: { label: 'Accepted', color: 'success' },
   Declined: { label: 'Declined', color: 'error' },
 };

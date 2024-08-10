@@ -14,6 +14,12 @@ const Theme = createTheme({
     text: {
       primary: "#32393d",
     },
+    user: {
+      main: '#9747FF',
+    },
+    user2: {
+      main: '#FF9243'
+    }
   },
   typography: {
     fontFamily: ["Nunito", "sans-serif"].join(","),
