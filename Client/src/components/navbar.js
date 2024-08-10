@@ -143,7 +143,7 @@ const Navbar = () => {
                 },
               }}
             >
-              History
+              {role === 'admin' ? 'Claims' : 'History'}
             </Typography>
             <Typography
               color="#32393d"
