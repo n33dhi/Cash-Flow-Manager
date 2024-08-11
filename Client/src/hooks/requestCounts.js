@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import api from '../api/axiosConfig';
 
 const useRequestStatusCounts = () => {
-  const [pendingCount, setPendingCount] = useState(null);
-  const [acceptedCount, setAcceptedCount] = useState(null);
-  const [declinedCount, setDeclinedCount] = useState(null);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [acceptedCount, setAcceptedCount] = useState(0);
+  const [declinedCount, setDeclinedCount] = useState(0);
 
   useEffect(() => {
     const fetchRequestStatusCounts = async () => {
