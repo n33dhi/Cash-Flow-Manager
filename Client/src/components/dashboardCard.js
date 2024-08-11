@@ -1,18 +1,18 @@
 import React from 'react';
-import useDashboardData from '../hooks/totalAmount';
+import useDashboardData from '../hooks/dataSummary';
+import DashboardChart from '../components/dashboardChart';
 
 import { Card, CardContent, Typography, Stack, Box } from '@mui/material';
-import UsersIcon from '@mui/icons-material/People';
-import ClaimsIcon from '@mui/icons-material/Checklist';
+import ClaimsIcon from '@mui/icons-material/AssignmentTurnedInRounded';
 import AmountIcon from '@mui/icons-material/MonetizationOn';
-import MonthIcon from '@mui/icons-material/Event';
 
-const AnalyticsCard = ({ icon, title, value, chipLabel, cardStyle, valueColor, iconColor, iconFill }) => {
+
+const AnalyticsCard = ({ icon, title, value, chipLabel, cardStyle, valueColor, iconColor, iconFill, ThisMonth }) => {
   return (
     <Card 
       sx={{ 
         width: 240, 
-        height: { xs: 100, md: 140 },
+        height: { xs: 80, md: 100 },
         borderRadius: 3, 
         padding: 2, 
         textAlign: 'left', 
@@ -31,9 +31,15 @@ const AnalyticsCard = ({ icon, title, value, chipLabel, cardStyle, valueColor, i
         }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <Typography variant="body2" sx={{ fontSize: 18 }}>
+          <Box sx={{display:'flex', flexDirection:'column'}}>
+          <Typography variant="body2" sx={{ fontSize: 16, color: 'gray', fontWeight:'bold'}}>
             {chipLabel}
           </Typography>
+          <Typography variant="h6" sx={{ fontSize: 20, fontWeight: 'bold', color: valueColor }}>
+            {value}
+          </Typography>
+          </Box>
+  
           <Box 
             sx={{ 
               width: 41, 
@@ -49,13 +55,14 @@ const AnalyticsCard = ({ icon, title, value, chipLabel, cardStyle, valueColor, i
             {React.cloneElement(icon, { sx: { fontSize: 20, color: iconFill } })}
           </Box>
         </Box>
-        <Box sx={{ marginTop: 'auto' }}>
-          <Typography variant="h6" sx={{ fontSize: 20, fontWeight: 'bold', color: valueColor }}>
-            {value}
+        <Box sx={{ marginTop: 'auto' }} display={'flex'} flexDirection={'row'} gap={1} alignItems={'center'}>
+        <Typography variant="body2" sx={{ fontSize: 12, }}>
+            {title}:
           </Typography>
-          <Typography variant="body2" sx={{ fontSize: 14, color: 'gray' }}>
-            {title}
+          <Typography sx={{color: valueColor, fontWeight: 'bold' }}>
+            {ThisMonth}
           </Typography>
+ 
         </Box>
       </CardContent>
     </Card>
@@ -64,7 +71,7 @@ const AnalyticsCard = ({ icon, title, value, chipLabel, cardStyle, valueColor, i
 
 const DashboardCards = () => {
 
-  const { totalAmountProcessed, claimsProcessedThisMonth, amountSpentThisMonth, totalClaims, claimsThisMonth } = useDashboardData();
+  const { totalAmountProcessed, amountSpentThisMonth, claimsProcessedThisMonth, totalClaims, } = useDashboardData();
 
   return (
     <Stack 
@@ -80,9 +87,10 @@ const DashboardCards = () => {
     >
       <AnalyticsCard
         icon={<AmountIcon />}
-        title="Total Amount Processed"
-        value={totalAmountProcessed !== null ? `₹${totalAmountProcessed.toLocaleString()}` : 'Loading...'}
-        chipLabel="Total Amount"
+        title="Spend this Month"
+        value= {totalAmountProcessed !== null ? `₹${totalAmountProcessed.toLocaleString()}` : 'Loading...'}
+        ThisMonth = {amountSpentThisMonth !== null ? `₹${amountSpentThisMonth.toLocaleString()}` : 'Loading...'}
+        chipLabel="Wallet"
         valueColor="rgba(151, 71, 255, 1)"
         iconColor="rgba(151, 71, 255, 0.20)"
         iconFill="rgba(151, 71, 255, 1)"
@@ -94,50 +102,22 @@ const DashboardCards = () => {
         }}
       />
       <AnalyticsCard
-        icon={<MonthIcon />}
-        title="Amount Spend this Month"
-        value={amountSpentThisMonth !== null ? `₹${amountSpentThisMonth.toLocaleString()}` : 'Loading...'}
-        chipLabel="This Month"
-        valueColor="rgba(71,255,67,1)"
-        iconColor="rgba(71,255,67,0.20)"
-        iconFill="rgba(71,255,67,1)"
-        cardStyle={{
-          boxShadow: '0 4px 12px 0 rgba(71,255,67,.2)',
-          background: 'rgba(71,255,67,.05)',
-          borderBottom: '3px solid rgba(71,255,67,.2)',
-          borderRight: '3px solid rgba(71,255,67,.2)',
-        }}
-      />
-      <AnalyticsCard
         icon={<ClaimsIcon />}
-        title="Total Claims"
+        title="Processed this Month"
         value={totalClaims !== null ? totalClaims : 'Loading...'}
+        ThisMonth={claimsProcessedThisMonth !== null ? claimsProcessedThisMonth : 'Loading...'}
         chipLabel="Claims"
-        valueColor="rgba(25, 118, 210, 1)"
-        iconColor="rgba(25, 118, 210, 0.20)"
-        iconFill="rgba(25, 118, 210, 1)"
+        valueColor="rgba(255, 152, 0, 1)" 
+        iconColor="rgba(255, 152, 0, 0.20)"
+        iconFill="rgba(255, 152, 0, 1)"
         cardStyle={{
-          boxShadow: '0 4px 12px 0 rgba(25, 118, 210, .2)',
-          background: 'rgba(25, 118, 210, 0.05)',
-          borderBottom: '3px solid rgba(25, 118, 210, .2)',
-          borderRight: '3px solid rgba(25, 118, 210, .2)',
+          boxShadow: '0 4px 12px 0 rgba(255, 152, 0, .2)',
+          background: 'rgba(255, 152, 0, 0.05)', 
+          borderBottom: '3px solid rgba(255, 152, 0, .2)', 
+          borderRight: '3px solid rgba(255, 152, 0, .2)'
         }}
       />
-      <AnalyticsCard
-        icon={<UsersIcon />}
-        title="Number of Users"
-        value={claimsThisMonth !== null ? claimsThisMonth : 'Loading...'}
-        chipLabel="Active"
-        valueColor="rgba(255, 52, 52, 1)"
-        iconColor="rgba(255, 52, 52, 0.20)"
-        iconFill="rgba(255, 52, 52, 1)"
-        cardStyle={{
-          boxShadow: '0 4px 12px 0 rgba(255, 52, 52, .2)',
-          background: 'rgba(255, 52, 52, 0.05)',
-          borderBottom: '3px solid rgba(255, 52, 52, .2)',
-          borderRight: '3px solid rgba(255, 52, 52, .2)',
-        }}
-      />
+      <DashboardChart />
     </Stack>
   );
 };
