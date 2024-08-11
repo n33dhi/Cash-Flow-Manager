@@ -6,13 +6,12 @@ const useDashboardData = () => {
   const [claimsProcessedThisMonth, setClaimsProcessedThisMonth] = useState(null);
   const [amountSpentThisMonth, setAmountSpentThisMonth] = useState(null);
   const [totalClaims, setTotalClaims] = useState(null);
-  const [claimsThisMonth, setClaimsThisMonth] = useState(null);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const response = await api.get('/cashMaster/dashboard');
-        const requests = response.data.data; // Adjust according to the API response structure
+        const requests = response.data.data; 
 
         // Calculate total amount processed
         const totalAmount = requests
@@ -42,13 +41,6 @@ const useDashboardData = () => {
         // Calculate total claims
         const totalClaimsCount = requests.length;
         setTotalClaims(totalClaimsCount);
-
-        // Calculate total claims this month
-        const totalClaimsThisMonth = requests
-          .filter(request => 
-            new Date(request.createdAt) >= startOfMonth
-          ).length;
-        setClaimsThisMonth(totalClaimsThisMonth);
 
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
