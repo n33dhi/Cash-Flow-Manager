@@ -4,7 +4,6 @@ import api from '../api/axiosConfig';
 import {
   Table, Container, Box, CircularProgress, TableBody, TableCell, FormControl, InputLabel, Select, MenuItem, IconButton, TableContainer, TableHead, TableRow, Paper, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, TextField, TablePagination, TableSortLabel, InputAdornment
 } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
 import CircleIcon from '@mui/icons-material/Circle';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTheme } from '@mui/material/styles';
@@ -206,11 +205,8 @@ const AllUserClaimTable = () => {
             <TableCell>
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <Typography fontSize={{ xs: 14, md: 18 }} fontWeight={700} style={{ marginRight: '8px' }}>
-                  Edit
+                  Click to Edit
                 </Typography>
-                <IconButton size="small">
-                  <EditIcon />
-                </IconButton>
               </div>
             </TableCell>
           </TableRow>

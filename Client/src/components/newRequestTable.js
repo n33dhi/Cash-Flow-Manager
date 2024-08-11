@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Container, Table, TableBody, TableCell, TableContainer, useMediaQuery, IconButton, TableHead, TableRow, Paper, CircularProgress, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions, Button, FormControl, InputLabel, Select, MenuItem, Typography, Chip } from '@mui/material';
-import EditIcon from "@mui/icons-material/Edit";
 import CircleIcon from "@mui/icons-material/Circle";
 import { useTheme } from "@mui/material/styles";
 import api from "../api/axiosConfig";
@@ -174,10 +173,9 @@ const NewRequestsTable = () => {
                         fontWeight={700}
                         style={{ marginRight: "8px" }}
                       >
-                        Edit
+                        Click to Edit
                       </Typography>
                       <IconButton size="small">
-                        <EditIcon />
                       </IconButton>
                     </div>
                   </TableCell>
