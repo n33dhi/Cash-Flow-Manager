@@ -85,6 +85,7 @@ const DashboardCards = () => {
         margin: { xs: '0px', md: '12px' } 
       }}
     >
+      <DashboardChart />
       <AnalyticsCard
         icon={<AmountIcon />}
         title="Spend this Month"
@@ -117,7 +118,6 @@ const DashboardCards = () => {
           borderRight: '3px solid rgba(255, 152, 0, .2)'
         }}
       />
-      <DashboardChart />
     </Stack>
   );
 };
