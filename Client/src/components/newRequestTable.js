@@ -6,6 +6,7 @@ import api from "../api/axiosConfig";
 
 const NewRequestsTable = () => {
   const [requests, setRequests] = useState([]);
+  const [budgetId, setBudgetId] = useState(null);
   const [sortedRequests, setSortedRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
@@ -65,6 +66,28 @@ const NewRequestsTable = () => {
   }, []);
 
   useEffect(() => {
+    const fetchBudgetId = async () => {
+      try {
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
+  
+        const response = await api.post(`/cashMaster/getBudgetId`, {month: currentMonth, year: currentYear});
+        if (response.data && response.data._id) {
+          setBudgetId(response.data._id); 
+          console.log(response.data._id);
+        } else {
+          console.error("No budget found for the current month and year.");
+        }
+      } catch (error) {
+        console.error("Error fetching budget ID:", error);
+      }
+    };
+  
+    fetchBudgetId();
+  }, []);
+
+  useEffect(() => {
     fetchData();
   }, [fetchData]);
 
@@ -98,18 +121,20 @@ const NewRequestsTable = () => {
   };
 
   const handleUpdateStatus = async () => {
-    if (!selectedRequest) return;
+    if (!selectedRequest || !budgetId) return;
+  
     try {
-      await api.put("/cashMaster/requests", {
-        id: selectedRequest._id,
-        status: statusToEdit,
-      });
+      await api.put("/cashMaster/requests", { id: selectedRequest._id, status: statusToEdit });
+  
+      if (statusToEdit === "Accepted") {
+        // console.log(budgetId);
+        await api.put(`/cashMaster/updateBudget/${budgetId}`);
+      }
+  
       setRequests((prevRequests) =>
         prevRequests
           .map((req) =>
-            req._id === selectedRequest._id
-              ? { ...req, status: statusToEdit }
-              : req
+            req._id === selectedRequest._id ? { ...req, status: statusToEdit } : req
           )
           .filter((req) => req.status === "Pending")
       );
@@ -121,7 +146,7 @@ const NewRequestsTable = () => {
                 ? { ...req, status: statusToEdit }
                 : req
             )
-            .filter((req) => req.status === "Pending") // filter out non-pending requests
+            .filter((req) => req.status === "Pending")
       );
       setEditDialogOpen(false);
     } catch (error) {

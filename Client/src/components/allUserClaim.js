@@ -26,6 +26,7 @@ const AllUserClaimTable = () => {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [statusToEdit, setStatusToEdit] = useState('');
   const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
+  const [budgetId, setBudgetId] = useState(null);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -68,6 +69,28 @@ const AllUserClaimTable = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  useEffect(() => {
+    const fetchBudgetId = async () => {
+      try {
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1;
+        const currentYear = now.getFullYear();
+  
+        const response = await api.post(`/cashMaster/getBudgetId`, {month: currentMonth, year: currentYear});
+        if (response.data && response.data._id) {
+          setBudgetId(response.data._id); 
+          console.log(response.data._id);
+        } else {
+          console.error("No budget found for the current month and year.");
+        }
+      } catch (error) {
+        console.error("Error fetching budget ID:", error);
+      }
+    };
+  
+    fetchBudgetId();
+  }, []);
 
   // Updated effect to handle searching by both name and claim ID
   useEffect(() => {
@@ -151,6 +174,12 @@ const AllUserClaimTable = () => {
         id: selectedRequest._id,
         status: newStatus
       });
+
+      if (budgetId) {
+        console.log(budgetId);
+        await api.put(`/cashMaster/updateBudget/${budgetId}`);
+      }
+
       setRequests(prevRequests =>
         prevRequests.map(req =>
           req._id === selectedRequest._id
