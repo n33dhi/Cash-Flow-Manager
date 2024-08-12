@@ -93,7 +93,7 @@ const RequestForm = () => {
                 fontWeight={700}
                 style={{ textAlign: "left" }}
               >
-                Claim your flight 🚀
+                Claim your Request!
               </Typography>
               <Typography style={{ textAlign: "left" }} fontSize={16}>
                 PettyCash Request Form

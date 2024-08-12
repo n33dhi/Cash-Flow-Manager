@@ -35,7 +35,7 @@ const Navbar = () => {
 
     try {
       api.post("/logout");
-      dispatch(clearUserData()); // clear user data from redux store
+      dispatch(clearUserData());
     } catch (error) {
       console.error("Logout failed:", error);
     }

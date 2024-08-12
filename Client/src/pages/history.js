@@ -31,9 +31,20 @@ const HistoryPage = () => {
           paddingLeft: isMobile ? '24px' : 0
         }}
       >
+        <Box sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, justifyContent:'start'}}>
+        <Typography
+          sx={{ fontSize: { xs: "18px", md: "24px" }, fontWeight: 700 }}
+          gutterBottom
+        >
+          <Link to={"/cashQuester/home"} style={{ textDecoration: "none" }}>
+            Home
+          </Link>
+          <span style={{ margin: "0 8px" }}> &gt; </span>
+        </Typography>
         <Typography fontSize={24} fontWeight={700} gutterBottom>
           History of Claims
         </Typography>
+        </Box>
         <Button
           component={Link}
           variant="contained"
@@ -43,7 +54,7 @@ const HistoryPage = () => {
             alignSelf: isMobile ? 'initial' : 'initial',
           }}
         >
-          + Request
+          New Request
         </Button>
       </Box>
       <HistoryTable />
