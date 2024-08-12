@@ -1,39 +1,7 @@
 import React from "react";
 import { PieChart, Pie, Cell, Text } from "recharts";
 import useRequestStatusCounts from "../hooks/requestCounts";
-import { Typography, Stack, Card, CardContent, Box } from "@mui/material";
-
-const RADIAN = Math.PI / 180;
-
-const PieValueLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  count,
-  fill,
-}) => {
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-  const x = cx + radius * Math.cos(-midAngle * RADIAN);
-  const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-  return (
-    <Text
-      x={x}
-      y={y}
-      fill={fill}
-      textAnchor={x > cx ? "start" : "end"}
-      dominantBaseline="central"
-    >
-      {`${(percent * 100).toFixed(0)}%`}
-      <tspan x={x} dy="1.2em">
-        {count}
-      </tspan>
-    </Text>
-  );
-};
+import { Typography, Card, CardContent, Box } from "@mui/material";
 
 const DashboardPieChart = () => {
   const { pendingCount, acceptedCount, declinedCount } =
@@ -56,25 +24,21 @@ const DashboardPieChart = () => {
         height: 100,
         borderRadius: 3,
         padding: 2,
-        boxShadow: "0 4px 16px 0 hsla(0, 0%, 9%, .1)",
+        // boxShadow: "0 4px 16px 0 hsla(0, 0%, 9%, .1)",
         background: "#f2f2f2",
-        // borderBottom: "3px solid rgba(255, 52, 52, .2)",
-        // borderRight: "3px solid rgba(255, 52, 52, .2)",
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        gap: 2,
       }}
     >
       <Box spacing={0.3} alignItems="flex-start" sx={{textWrap:'nowrap'}}>
         <Typography fontWeight={700} color={"gray"}>
-          Status Update
+          Status Overview
         </Typography>
         {data.map((entry, index) => (
           <Box key={index} sx={{ display: "flex", alignItems: "center" }}>
                         <Typography
               sx={{
-                // fontWeight: 700,
                 marginLeft: "1px",
                 color: "gray",
                 fontSize: "12px",
@@ -110,6 +74,7 @@ const DashboardPieChart = () => {
             labelLine={false}
             fill="#8884d8"
             dataKey="value"
+            animationDuration={1000}
           >
             {data.map((entry, index) => (
               <Cell
