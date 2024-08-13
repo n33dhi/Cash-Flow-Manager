@@ -101,7 +101,7 @@ const SetBudget = async (req, res) => {
     }
 
     const now = new Date();
-    const currentMonth = now.getMonth() + 1; // getMonth() returns 0-11
+    const currentMonth = now.getMonth() + 1;
     const currentYear = now.getFullYear();
 
     let budget = await Budget.findOne({ month: currentMonth, year: currentYear });
@@ -120,9 +120,7 @@ const SetBudget = async (req, res) => {
       0
     );
 
-    const remainingAmount = amount;
-
-    // Check if a budget for the current month already exists
+    // If a budget for the current month already exists, calculate the remaining amount
     if (budget) {
       if (budget.budgetSet) {
         if (amount >= 1000 || now.getDate() !== 1) {
@@ -134,14 +132,15 @@ const SetBudget = async (req, res) => {
 
       budget.amount = amount;
       budget.initialAmount = amount;
-      budget.remainingAmount = remainingAmount;
+      budget.remainingAmount = amount - amountSpentThisMonth;
       budget.budgetSet = true;
       await budget.save();
     } else {
+      // If no budget exists, create a new budget
       budget = new Budget({
         amount,
         initialAmount: amount,
-        remainingAmount,
+        remainingAmount: amount - amountSpentThisMonth,
         budgetSet: true,
         month: currentMonth,
         year: currentYear,
@@ -154,6 +153,7 @@ const SetBudget = async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 };
+
 
 const UpdateBudget = async (req, res) => {
   const { id } = req.params;
