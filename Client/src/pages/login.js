@@ -5,8 +5,9 @@ import api from "../api/axiosConfig";
 import { setAccessToken } from "../Utilities/tokenManagement";
 import { useDispatch, useSelector } from "react-redux";
 import { setTokenData } from "../stateManagement/authSlice";
+import { Toaster, toast } from "react-hot-toast";
 
-import image from "../minimal black line money.svg";
+import image from "../undraw_undraw_undraw_undraw_sign_up_ln1s_-1-_s4bc_-1-_ee41_-1-_kf4d.svg";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -23,8 +24,6 @@ const Login = () => {
         navigate("/cashMaster/dashboard");
       } else if (role.includes("employee")) {
         navigate("/cashQuester/home");
-      } else {
-        navigate("/login");
       }
     }
   }, [role, navigate]);
@@ -59,10 +58,17 @@ const Login = () => {
         // } else {
         //   navigate("/login");
         // }
-
       }
+
     } catch (err) {
-      console.error("Error:", err.response ? err.response.data : err.message);
+      // console.error("Error:", err.response ? err.response.data : err.message);
+      toast.error(err.response ? err.response.data.message : "Wrong Password!", {
+        position: "top-right",
+        style: {
+          fontFamily: 'Nunito, sans-serif',
+          fontWeight: '700'
+        }
+      });
     }
   };
 
@@ -112,7 +118,7 @@ const Login = () => {
             width: "100%",
             maxWidth: 400,
             height: "auto",
-            marginTop: 20,
+            marginTop: 70,
           }}
         />
       </Box>
@@ -229,6 +235,7 @@ const Login = () => {
           </Typography>
         </Box>
       </Box>
+      <Toaster position="top-right" reverseOrder={false} />
     </Box>
   );
 };

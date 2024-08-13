@@ -176,7 +176,7 @@ const AllUserClaimTable = () => {
       });
 
       if (budgetId) {
-        console.log(budgetId);
+        // console.log(budgetId);
         await api.put(`/cashMaster/updateBudget/${budgetId}`);
       }
 

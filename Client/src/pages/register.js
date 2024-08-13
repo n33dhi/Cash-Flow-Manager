@@ -13,7 +13,7 @@ import api from "../api/axiosConfig";
 import { useNavigate, Link } from "react-router-dom";
 import { validatePassword } from "../Utilities/validation";
 
-import Logo from "../smiling man with palm up.svg";
+import Logo from "../Sign up form.svg";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -126,7 +126,7 @@ const Register = () => {
           <Typography fontSize={24} mb={1} style={{ textAlign: "left" }}>
             Create a PettyWallet Account
           </Typography>
-          <Typography style={{ textAlign: "left" }} fontSize={16}>
+          <Typography style={{ textAlign: "left" }} fontSize={16} marginBottom={5}>
             Enter your Details
           </Typography>
           <img
@@ -135,7 +135,7 @@ const Register = () => {
             style={{
               width: "100%",
               maxWidth: 400,
-              height: "auto",
+              height: 300,
               marginTop: 20,
             }}
           />

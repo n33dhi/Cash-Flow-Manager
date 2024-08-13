@@ -126,7 +126,7 @@ const NewRequestsTable = () => {
     try {
       await api.put("/cashMaster/requests", { id: selectedRequest._id, status: statusToEdit });
   
-      if (statusToEdit === "Accepted") {
+      if (statusToEdit === 'Accepted') {
         // console.log(budgetId);
         await api.put(`/cashMaster/updateBudget/${budgetId}`);
       }

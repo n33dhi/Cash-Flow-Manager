@@ -9,7 +9,7 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import img from "../Sign up form.svg";
+import img from "../smiling man with palm up.svg";
 import api from "../api/axiosConfig";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -103,9 +103,9 @@ const RequestForm = () => {
                 alt="Logo"
                 style={{
                   width: "100%",
-                  maxWidth: 400,
+                  maxWidth: 300,
                   height: "auto",
-                  marginTop: 20,
+                  marginTop: 10,
                 }}
               />
             </Box>

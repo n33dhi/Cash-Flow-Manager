@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from "js-cookie";
+import { useNavigationHook }from '../Utilities/navigationContext';
 import { setAccessToken, getAccessToken, clearAccessToken } from '../Utilities/tokenManagement';
 import { clearUserData } from '../stateManagement/authSlice'; 
 import store from '../stateManagement/store'; 
@@ -48,7 +49,6 @@ api.interceptors.response.use(
     if (error.response && (error.response.status === 401 || error.response.status === 403)) {
       if (!originalRequest._retry) {
         originalRequest._retry = true;
-
         if (!isRefreshing) {
           isRefreshing = true;
 
@@ -60,9 +60,11 @@ api.interceptors.response.use(
               localStorage.clear();
               store.dispatch(clearUserData());
               Cookies.remove('refreshToken', { path: '/' });
-              setTimeout(() => {
-                window.location.href = '/login';
-              }, 0);
+              // setTimeout(() => {
+              //   window.location.href = '/login';
+              // }, 0);
+              const navigate = useNavigationHook();
+              navigate('/login');
               return Promise.reject(new Error('No access token received'));
             }
 
@@ -79,7 +81,10 @@ api.interceptors.response.use(
             store.dispatch(clearUserData());
             localStorage.clear();
             Cookies.remove('refreshToken', { path: '/' });
-            window.location.href = '/login';
+            // window.location.href = '/login';
+            // console.log("hi")
+            const navigate = useNavigationHook();
+            navigate('/login');
             return Promise.reject(new Error('Refresh token expired or invalid'));
           }
         }
