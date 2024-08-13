@@ -49,6 +49,7 @@ function RequestTable() {
             variant="contained"
             color="primary"
             // onClick={handlePrint}
+            disabled
             sx={{
               alignSelf: isMobile ? "flex-start" : "flex-end",
               mt: isMobile ? 2 : 0,
