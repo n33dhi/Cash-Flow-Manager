@@ -64,6 +64,7 @@ const NewRequestsTable = () => {
       setLoading(false);
     }
   }, []);
+  // console.log(requests)
 
   useEffect(() => {
     const fetchBudgetId = async () => {

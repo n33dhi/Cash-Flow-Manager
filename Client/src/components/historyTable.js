@@ -197,7 +197,7 @@ const HistoryTable = () => {
         onRowsPerPageChange={handleRowsPerPageChange}
       />
     </TableContainer>
-  ), [paginatedRequests, sortDirection, isMobile, handleSort, page, rowsPerPage]);
+  ), [paginatedRequests, sortDirection, isMobile, handleSort, page, rowsPerPage, sortedRequests.length]);
 
   return (
     <Container>

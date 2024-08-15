@@ -153,7 +153,7 @@ const Home = () => {
           </Box>
         </Box>
       </Box>
-      <Typography fontSize={20} marginTop={4} fontWeight={400} align="center">
+      <Typography fontSize={20} marginTop={{xs: 4, md: 8}} fontWeight={400} align="center">
         Let us help you streamline the process.
       </Typography>
       <Button
