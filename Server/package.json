@@ -4,7 +4,8 @@
   "description": "PettyWallet Server",
   "main": "server.js",
   "scripts": {
-    "start": "supervisor server.js"
+    "start": "server.js",
+    "start dev": "supervisor server.js"
   },
   "author": "n33dhi",
   "license": "ISC",
