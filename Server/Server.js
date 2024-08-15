@@ -4,8 +4,8 @@ const cors = require('cors');
 const cookieParser = require("cookie-parser");
 
 const OnBoardRoute = require("./routes/OnBoardRoute");
-const cashQuesterRoute = require("../Server/routes/cashQuesterRoute");
-const cashMasterRoute = require("../Server/routes/cashMasterRoute");
+const cashQuesterRoute = require("./routes/cashQuesterRoute");
+const cashMasterRoute = require("./routes/cashMasterRoute");
 
 const app = express();
 
@@ -14,7 +14,7 @@ require('dotenv').config();
 
 app.use(cookieParser());
 app.use(express.json());
-const allowedOrigins = ['http://localhost:3000'];
+const allowedOrigins = ['http://localhost:3000', 'https://pettywallet-client.web.app'];
 app.use(cors({
   credentials: true,
   origin: allowedOrigins
