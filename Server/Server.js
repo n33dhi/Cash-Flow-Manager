@@ -14,7 +14,7 @@ require('dotenv').config();
 
 app.use(cookieParser());
 app.use(express.json());
-const allowedOrigins = ['http://localhost:3000', 'https://pettywallet-client.web.app'];
+const allowedOrigins = ['http://localhost:3000', 'https://pettywallets.web.app'];
 app.use(cors({
   credentials: true,
   origin: allowedOrigins
