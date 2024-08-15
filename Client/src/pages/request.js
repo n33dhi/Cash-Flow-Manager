@@ -12,7 +12,7 @@ import {
 import img from "../smiling man with palm up.svg";
 import api from "../api/axiosConfig";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const RequestForm = () => {
   const role = useSelector((state) => state.auth.id);
@@ -49,6 +49,7 @@ const RequestForm = () => {
     <>
       <div
         style={{
+          marginTop: '30px',
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -95,7 +96,7 @@ const RequestForm = () => {
               >
                 Claim your Request!
               </Typography>
-              <Typography style={{ textAlign: "left" }} fontSize={16}>
+              <Typography style={{ textAlign: "left" }} fontSize={16} mb={3}>
                 PettyCash Request Form
               </Typography>
               <img
@@ -103,9 +104,9 @@ const RequestForm = () => {
                 alt="Logo"
                 style={{
                   width: "100%",
-                  maxWidth: 300,
+                  maxWidth: 200,
                   height: "auto",
-                  marginTop: 10,
+                  marginTop: 50,
                 }}
               />
             </Box>
@@ -131,7 +132,7 @@ const RequestForm = () => {
                 <Typography
                   fontSize={24}
                   fontWeight={500}
-                  mb={3}
+                  mb={2}
                   style={{ textAlign: "left" }}
                 >
                   Form
@@ -194,6 +195,26 @@ const RequestForm = () => {
                 >
                   Submit
                 </Button>
+                <Typography
+              variant="body2"
+              style={{ marginTop: "20px", textAlign: "initial" }}
+            >
+              <Link
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/home");
+                }}
+                style={{
+                  textDecoration: "none",
+                  color: "#32393d",
+                  fontWeight: "800",
+                  fontSize: '16px'
+                }}
+              >
+                Back to Home
+              </Link>
+              </Typography>
               </form>
             </Box>
           </Box>
