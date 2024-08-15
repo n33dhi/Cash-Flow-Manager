@@ -6,12 +6,12 @@ import { clearUserData } from '../stateManagement/authSlice';
 import store from '../stateManagement/store'; 
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: 'https://pettywallet.onrender.com/',
   withCredentials: true,
 });
 
 const refreshApi = axios.create({
-  baseURL: 'http://localhost:3001',
+  baseURL: 'https://pettywallet.onrender.com/',
   withCredentials: true,
 });
 

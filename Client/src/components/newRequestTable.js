@@ -189,7 +189,7 @@ const NewRequestsTable = () => {
                   {!isMobile && <TableCell>Date</TableCell>}
                   <TableCell>Employee</TableCell>
                   <TableCell>Amount</TableCell>
-                  {!isMobile && <TableCell>Category</TableCell>}
+                  {!isMobile && <TableCell>Description</TableCell>}
                   {!isMobile && <TableCell>Approved By</TableCell>}
                   <TableCell>
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -225,7 +225,7 @@ const NewRequestsTable = () => {
                       )}
                       <TableCell>{request.requester}</TableCell>
                       <TableCell>{request.amount}</TableCell>
-                      {!isMobile && <TableCell>{request.category}</TableCell>}
+                      {!isMobile && <TableCell>{request.description}</TableCell>}
                       {!isMobile && <TableCell>{request.approvedBy}</TableCell>}
                       <TableCell>
                         <Chip

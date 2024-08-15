@@ -17,7 +17,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const statusChips = {
-  Pending: { label: 'Pending', color: 'primary' },
+  Pending: { label: 'Pending', color: 'user2' },
   Accepted: { label: 'Accepted', color: 'success' },
   Declined: { label: 'Declined', color: 'error' },
 };
@@ -237,8 +237,9 @@ const HistoryTable = () => {
               sx={{
                 cursor: 'pointer',
                 backgroundColor: 'white',
+                border: statusFilter === status ? `2px solid ${theme.palette[statusChips[status].color].main}` : 'none',
                 '&:hover': {
-                  backgroundColor: 'white', // Prevent hover effect
+                  backgroundColor: 'white',
                 }
               }}
               icon={<CircleIcon />}

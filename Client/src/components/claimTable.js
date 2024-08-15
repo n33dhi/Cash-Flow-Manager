@@ -21,10 +21,9 @@ import {
   Button,
   Chip,
   TableSortLabel,
-  Typography, // Import TableSortLabel for sorting
+  Typography,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import EditIcon from "@mui/icons-material/Edit";
 import api from "../api/axiosConfig";
 import { useParams } from "react-router-dom";
 

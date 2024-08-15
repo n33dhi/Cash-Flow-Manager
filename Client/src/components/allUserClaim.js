@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import api from '../api/axiosConfig';
 import {
-  Table, Container, Box, CircularProgress, TableBody, TableCell, FormControl, InputLabel, Select, MenuItem, IconButton, TableContainer, TableHead, TableRow, Paper, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, TextField, TablePagination, TableSortLabel, InputAdornment
+  Table, Container, Box, CircularProgress, TableBody, TableCell, FormControl, InputLabel, Select, MenuItem, TableContainer, TableHead, TableRow, Paper, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, TextField, TablePagination, TableSortLabel, InputAdornment
 } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
 import SearchIcon from '@mui/icons-material/Search';
@@ -228,7 +228,7 @@ const AllUserClaimTable = () => {
             <TableCell>Date</TableCell>
             {!isMobile && <TableCell>Employee</TableCell>}
             {!isMobile && <TableCell>Amount</TableCell>}
-            {!isMobile && <TableCell>Category</TableCell>}
+            {!isMobile && <TableCell>Description</TableCell>}
             {!isMobile && <TableCell>Approved By</TableCell>}
             <TableCell>
               <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -247,7 +247,7 @@ const AllUserClaimTable = () => {
                 <TableCell>{formatDate(request.createdAt)}</TableCell>
                 {!isMobile && <TableCell>{request.requester}</TableCell>}
                 {!isMobile && <TableCell>{request.amount}</TableCell>}
-                {!isMobile && <TableCell>{request.category}</TableCell>}
+                {!isMobile && <TableCell>{request.description}</TableCell>}
                 {!isMobile && <TableCell>{request.approvedBy}</TableCell>}
                 <TableCell>
                   <Chip
@@ -281,7 +281,7 @@ const AllUserClaimTable = () => {
         </TableBody>
       </Table>
     </TableContainer>
-  ), [paginatedRequests, sortDirection, isMobile]);
+  ), [paginatedRequests, sortDirection, isMobile, handleSort]);
 
   return (
     <Container maxWidth="lg">
