@@ -16,7 +16,7 @@ const useRequestStatusCounts = () => {
         const pending = requests.filter(request => request.status === 'Pending').length;
         const accepted = requests.filter(request => request.status === 'Accepted').length;
         const declined = requests.filter(request => request.status === 'Declined').length;
-        console.log(pending);
+        // console.log(pending);
 
         setPendingCount(pending);
         setAcceptedCount(accepted);
