@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, TextField, Button, Typography } from "@mui/material";
+import { Box, TextField, Button, Typography, Backdrop, CircularProgress } from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axiosConfig";
 import { setAccessToken } from "../Utilities/tokenManagement";
@@ -14,6 +14,7 @@ const Login = () => {
     email: "",
     password: "",
   });
+  const [loader, setLoader] = useState(false);
   const role = useSelector((state) => state.auth.role);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,37 +39,27 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formData);
+    setLoader(true); 
     try {
       const response = await api.post("/login", formData);
-      // console.log("Response:", response.data);
-
       const { token } = response.data;
 
       if (token) {
-        dispatch(setTokenData(token)); //decodes the token and sets user data in Redux
-        setAccessToken(token); //sets the token in memory
+        dispatch(setTokenData(token)); // Decode the token and set user data in Redux
+        setAccessToken(token); // Set the token in memory
 
-        // console.log("User role:", role);
-
-        // if (role.includes("admin")) {
-        //   navigate("/cashMaster/dashboard");
-        // } else if (role.includes("employee")) {
-        //   navigate("/cashQuester/home");
-        // } else {
-        //   navigate("/login");
-        // }
+        // Redirect based on role (handled by useEffect)
       }
-
     } catch (err) {
-      // console.error("Error:", err.response ? err.response.data : err.message);
-      toast.error(err.response ? err.response.data.message : "Wrong Password!", {
+      toast.error(err.response ? err.response.data.message : "Please Try Again!", {
         position: "top-right",
         style: {
           fontFamily: 'Nunito, sans-serif',
           fontWeight: '700'
         }
       });
+    } finally {
+      setLoader(false); 
     }
   };
 
@@ -76,7 +67,7 @@ const Login = () => {
     <Box
       sx={{
         display: "flex",
-        flexDirection: { xs: "column", md: "row" }, // Stack column on small screens
+        flexDirection: { xs: "column", md: "row" },
         alignItems: "center",
         justifyContent: { xs: "flex-start", sm: "center", md: "center" },
         minHeight: "100vh",
@@ -87,7 +78,7 @@ const Login = () => {
     >
       <Box
         sx={{
-          display: { xs: "none", md: "flex" }, // Hide image on small screens
+          display: { xs: "none", md: "flex" },
           flexDirection: "column",
           justifyItems: "flex-start",
           width: "700px",
@@ -236,6 +227,10 @@ const Login = () => {
         </Box>
       </Box>
       <Toaster position="top-right" reverseOrder={false} />
+
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loader}>
+        <CircularProgress color="primary" />
+      </Backdrop>
     </Box>
   );
 };
