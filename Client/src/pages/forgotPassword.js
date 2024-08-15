@@ -14,7 +14,7 @@ const ForgotPassword = () => {
             alert("Check your")
         }
     })
-    console.log('Email submitted:', email);
+    // console.log('Email submitted:', email);
   };
 
   return (
@@ -37,7 +37,7 @@ const ForgotPassword = () => {
             Forgot Password
           </Typography>
           <Typography variant="body1" mb={2}>
-            Enter your email address to reset your password.
+            Under Development! Please contact Admin.
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
             <TextField
@@ -51,6 +51,7 @@ const ForgotPassword = () => {
               type="email"
             />
             <Button
+            disabled
               type="submit"
               variant="contained"
               fullWidth
