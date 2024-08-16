@@ -4,19 +4,19 @@ import {
   CardContent,
   Typography,
   Box,
-  Stack,
   Button,
-  Modal,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   TextField,
   LinearProgress,
-  IconButton,
 } from "@mui/material";
 import WalletRoundedIcon from "@mui/icons-material/WalletRounded";
-import CloseIcon from "@mui/icons-material/Close";
 import api from "../api/axiosConfig";
 
 const BudgetCard = () => {
-  const [openModal, setOpenModal] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const [budget, setBudget] = useState(null);
   const [remainingBudget, setRemainingBudget] = useState(null);
   const [newBudget, setNewBudget] = useState("");
@@ -46,7 +46,7 @@ const BudgetCard = () => {
       const { budget: updatedBudget, remainingAmount } = response.data;
       setBudget(updatedBudget);
       setRemainingBudget(remainingAmount);
-      setOpenModal(false);
+      setOpenDialog(false);
     } catch (error) {
       console.error("Error setting budget:", error);
     }
@@ -69,7 +69,7 @@ const BudgetCard = () => {
         position: "relative",
         cursor: canEditBudget ? "pointer" : "default",
       }}
-      onClick={canEditBudget ? () => setOpenModal(true) : undefined}
+      onClick={canEditBudget ? () => setOpenDialog(true) : undefined}
     >
       <CardContent sx={{ padding: 0 }}>
         <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
@@ -116,7 +116,7 @@ const BudgetCard = () => {
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setOpenModal(true);
+                  setOpenDialog(true);
                 }}
                 disabled={!canEditBudget}
               >
@@ -125,9 +125,7 @@ const BudgetCard = () => {
                     fontSize: 20,
                     color: canEditBudget ? "#FF3434" : "rgba(0, 0, 0, 0.26)",
                     "&:hover": {
-                      color: canEditBudget
-                        ? "#FF3434"
-                        : "rgba(0, 0, 0, 0.26)",
+                      color: canEditBudget ? "#FF3434" : "rgba(0, 0, 0, 0.26)",
                     },
                   }}
                 />
@@ -175,71 +173,51 @@ const BudgetCard = () => {
         </Box>
       </CardContent>
 
-      <Modal
-  open={openModal}
-  onClose={() => setOpenModal(false)}
-  aria-labelledby="modal-title"
-  aria-describedby="modal-description"
->
-  <Box
-    sx={{
-      position: "absolute",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
-      width: 300,
-      bgcolor: "background.paper",
-      borderRadius: 3,
-      boxShadow: 24,
-      p: 4,
-      position: "relative",
-    }}
-  >
-    <IconButton
-      aria-label="close"
-      onClick={() => setOpenModal(false)}
-      sx={{
-        position: "absolute",
-        top: 8,
-        right: 8,
-        color: (theme) => theme.palette.grey[500],
-      }}
-    >
-      <CloseIcon />
-    </IconButton>
-    <Typography id="modal-title" variant="h6" component="h2">
-      Set Budget
-    </Typography>
-    <TextField
-      fullWidth
-      label="Budget Amount"
-      variant="outlined"
-      value={newBudget}
-      onChange={(e) => setNewBudget(e.target.value)}
-      sx={{ marginTop: 2 }}
-      type="number"
-    />
-    <Stack direction="row" spacing={2} sx={{ marginTop: 2 }}>
-      <Button
-        fullWidth
-        variant="contained"
-        color="primary"
-        onClick={handleSaveBudget}
+      <Dialog
+        open={openDialog}
+        onClose={(e) => {
+          e.stopPropagation();
+          setOpenDialog(false);
+        }}
+        aria-labelledby="dialog-title"
+        aria-describedby="dialog-description"
       >
-        Save
-      </Button>
-      <Button
-        fullWidth
-        variant="contained"
-        color="secondary"
-        onClick={() => setOpenModal(false)} // This should close the modal
-      >
-        Cancel
-      </Button>
-    </Stack>
-  </Box>
-</Modal>
-
+        <DialogTitle id="dialog-title">Set Budget</DialogTitle>
+        <DialogContent>
+          <TextField
+            fullWidth
+            label="Budget Amount"
+            variant="outlined"
+            value={newBudget}
+            onChange={(e) => setNewBudget(e.target.value)}
+            sx={{ marginTop: 2 }}
+            type="number"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSaveBudget();
+            }}
+          >
+            Save
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenDialog(false);
+            }}
+          >
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Card>
   );
 };

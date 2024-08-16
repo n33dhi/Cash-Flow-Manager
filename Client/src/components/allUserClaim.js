@@ -80,7 +80,7 @@ const AllUserClaimTable = () => {
         const response = await api.post(`/cashMaster/getBudgetId`, {month: currentMonth, year: currentYear});
         if (response.data && response.data._id) {
           setBudgetId(response.data._id); 
-          console.log(response.data._id);
+          // console.log(response.data._id);
         } else {
           console.error("No budget found for the current month and year.");
         }
