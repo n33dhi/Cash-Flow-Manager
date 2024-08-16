@@ -2,11 +2,14 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import api from '../api/axiosConfig';
 import {
-  Table, Container, CircularProgress, TableBody, InputAdornment, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, TextField, TablePagination, TableSortLabel
+  Table, Container, CircularProgress, TableBody, InputAdornment, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, useMediaQuery, TextField, TablePagination, TableSortLabel, IconButton
 } from '@mui/material';
 import CircleIcon from '@mui/icons-material/Circle';
 import SearchIcon from '@mui/icons-material/Search';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { styled, useTheme } from '@mui/material/styles';
+import { Toaster, toast } from "react-hot-toast";
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   maxWidth: '250px',
@@ -31,7 +34,7 @@ const HistoryTable = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortedRequests, setSortedRequests] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10 );
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const userId = useSelector((state) => state.auth.id);
   const theme = useTheme();
@@ -125,6 +128,32 @@ const HistoryTable = () => {
     setSelectedRequest(null);
   };
 
+  const handleDeleteRequest = async (requestId) => {
+    const toastId = toast.loading('Deleting request...');
+    try {
+        await api.delete(`/cashQuester/history/${requestId}`);
+        setRequests((prevRequests) => prevRequests.filter((request) => request._id !== requestId));
+        toast.success('Request deleted successfully!', { id: toastId, style: {
+          fontFamily: 'Nunito, sans-serif',
+          fontWeight: '700'
+        } });
+    } catch (error) {
+        console.error('Error deleting request:', error);
+        toast.error('Failed to delete request.', { id: toastId, style: {
+          fontFamily: 'Nunito, sans-serif',
+          fontWeight: '700'
+        } });
+    }
+};
+
+
+  const isDeleteIconDisabled = (createdAt) => {
+    const oneHourInMs = 60 * 60 * 1000;
+    const currentTime = new Date().getTime();
+    const requestTime = new Date(createdAt).getTime();
+    return currentTime - requestTime > oneHourInMs;
+  };
+
   const paginatedRequests = useMemo(() => {
     return sortedRequests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   }, [sortedRequests, page, rowsPerPage]);
@@ -156,6 +185,7 @@ const HistoryTable = () => {
             {!isMobile && <TableCell>Category</TableCell>}
             {!isMobile && <TableCell>Approved By</TableCell>}
             <TableCell>Status</TableCell>
+            <TableCell>Action</TableCell> 
           </TableRow>
         </TableHead>
         <TableBody>
@@ -176,11 +206,22 @@ const HistoryTable = () => {
                     style={{ cursor: 'default' }}
                   />
                 </TableCell>
+                <TableCell>
+                  <IconButton
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteRequest(request._id);
+                    }}
+                    disabled={isDeleteIconDisabled(request.createdAt)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={isMobile ? 7 : 8} style={{ textAlign: 'center' }}>
+              <TableCell colSpan={isMobile ? 8 : 9} style={{ textAlign: 'center' }}>
                 No records found!
               </TableCell>
             </TableRow>
@@ -201,6 +242,7 @@ const HistoryTable = () => {
 
   return (
     <Container>
+      <Toaster position="top-right" reverseOrder={false} />
       <div style={{
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
@@ -227,7 +269,7 @@ const HistoryTable = () => {
           }}
         />
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', alignItems: 'center' }}>
-        <Typography marginRight={2} fontWeight={700}>Sort by</Typography>
+          <Typography marginRight={2} fontWeight={700}>Sort by</Typography>
           {Object.keys(statusChips).map((status) => (
             <Chip
               key={status}
@@ -247,13 +289,13 @@ const HistoryTable = () => {
           ))}
         </div>
       </div>
-
+  
       {loading ? (
         <CircularProgress size={24} />
       ) : (
-        MemoizedTable
+        MemoizedTable 
       )}
-
+  
       {selectedRequest && (
         <Dialog
           open={true}
@@ -280,6 +322,7 @@ const HistoryTable = () => {
       )}
     </Container>
   );
+  
 };
 
 export default HistoryTable;
