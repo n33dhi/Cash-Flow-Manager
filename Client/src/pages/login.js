@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { Box, TextField, Button, Typography, Backdrop, CircularProgress } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Backdrop,
+  CircularProgress,
+  IconButton,
+  InputAdornment,
+} from "@mui/material";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axiosConfig";
 import { setAccessToken } from "../Utilities/tokenManagement";
 import { useDispatch, useSelector } from "react-redux";
 import { setTokenData } from "../stateManagement/authSlice";
 import { Toaster, toast } from "react-hot-toast";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 import image from "../undraw_undraw_undraw_undraw_sign_up_ln1s_-1-_s4bc_-1-_ee41_-1-_kf4d.svg";
 
@@ -18,6 +29,11 @@ const Login = () => {
   const role = useSelector((state) => state.auth.role);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   useEffect(() => {
     if (role) {
@@ -39,7 +55,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoader(true); 
+    setLoader(true);
     try {
       const response = await api.post("/login", formData);
       const { token } = response.data;
@@ -51,15 +67,18 @@ const Login = () => {
         // Redirect based on role (handled by useEffect)
       }
     } catch (err) {
-      toast.error(err.response ? err.response.data.message : "Please Try Again!", {
-        position: "top-right",
-        style: {
-          fontFamily: 'Nunito, sans-serif',
-          fontWeight: '700'
+      toast.error(
+        err.response ? err.response.data.message : "Please Try Again!",
+        {
+          position: "top-right",
+          style: {
+            fontFamily: "Nunito, sans-serif",
+            fontWeight: "700",
+          },
         }
-      });
+      );
     } finally {
-      setLoader(false); 
+      setLoader(false);
     }
   };
 
@@ -170,7 +189,16 @@ const Login = () => {
             fullWidth
             margin="normal"
             required
-            type="password"
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           <Box
             style={{
@@ -228,7 +256,10 @@ const Login = () => {
       </Box>
       <Toaster position="top-right" reverseOrder={false} />
 
-      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loader}>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loader}
+      >
         <CircularProgress color="primary" />
       </Backdrop>
     </Box>

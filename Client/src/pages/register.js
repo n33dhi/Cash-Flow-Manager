@@ -8,7 +8,11 @@ import {
   InputLabel,
   Box,
   Typography,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import api from "../api/axiosConfig";
 import { useNavigate, Link } from "react-router-dom";
 import { validatePassword } from "../Utilities/validation";
@@ -27,6 +31,11 @@ const Register = () => {
     password: "",
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -35,34 +44,34 @@ const Register = () => {
       [name]: value,
     }));
 
-    
-      // Validate password field
-      if (name === 'password') {
-        const errorMessage = validatePassword(value);
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [name]: errorMessage,
-        }));
-      }
+    // Validate password field
+    if (name === "password") {
+      const errorMessage = validatePassword(value);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: errorMessage,
+      }));
+    }
   };
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-     // Perform validation for all fields
-     const passwordError = validatePassword(formData.password);
+    // Perform validation for all fields
+    const passwordError = validatePassword(formData.password);
 
-     if (passwordError) {
-       setErrors((prevErrors) => ({
-         ...prevErrors,
-         password: passwordError,
-       }));
-       return; // Prevent form submission if there's a validation error
-     }
+    if (passwordError) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: passwordError,
+      }));
+      return; // Prevent form submission if there's a validation error
+    }
 
     // console.log(formData);
-    await api.post("/register", formData)
+    await api
+      .post("/register", formData)
       .then((response) => {
         // console.log(response);
         if (response.data.status) {
@@ -126,7 +135,11 @@ const Register = () => {
           <Typography fontSize={24} mb={1} style={{ textAlign: "left" }}>
             Create a PettyWallet Account
           </Typography>
-          <Typography style={{ textAlign: "left" }} fontSize={16} marginBottom={5}>
+          <Typography
+            style={{ textAlign: "left" }}
+            fontSize={16}
+            marginBottom={5}
+          >
             Enter your Details
           </Typography>
           <img
@@ -144,13 +157,14 @@ const Register = () => {
         <Box
           sx={{
             flex: 1,
-            width: { xs: "270px", sm: '400px', md: "150px" },
+            width: { xs: "270px", sm: "400px", md: "150px" },
             boxShadow: {
               xs: "none",
               sm: "0 4px 16px 0 hsla(0, 0%, 9%, .1)",
-              md: "0 4px 16px 0 hsla(0, 0%, 9%, .1)"},
+              md: "0 4px 16px 0 hsla(0, 0%, 9%, .1)",
+            },
             padding: "50px",
-            background: { xs: "none", sm:"#fff", md: "#fff" },
+            background: { xs: "none", sm: "#fff", md: "#fff" },
             borderRadius: "5px",
           }}
         >
@@ -208,7 +222,16 @@ const Register = () => {
               fullWidth
               margin="normal"
               required
-              type="password"
+              type={showPassword ? "text" : "password"}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleClickShowPassword} edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
               error={!!errors.password}
               helperText={errors.password || " "}
               FormHelperTextProps={{ style: { margin: 0 } }}
