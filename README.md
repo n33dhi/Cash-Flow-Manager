@@ -4,12 +4,19 @@ Tech Stack
 PettyWallet is built using the following technologies:
 
 Frontend: React (MERN Stack)
+
 Backend: Node.js with Express
+
 Database: MongoDB
+
 CSS Framework: Material UI
+
 User Authentication: JWT tokens for role-based login and protected routes
+
 Deployment:
+
     Frontend: Firebase
+    
     Backend: Render
 
 Features
@@ -47,4 +54,5 @@ Start the frontend:
     npm start
     
 Contributing
+
 Contributions are welcome! If you find any bugs or want to contribute to enhancing the project, feel free to open an issue or submit a pull request.
