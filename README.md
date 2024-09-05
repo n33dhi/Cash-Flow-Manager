@@ -3,14 +3,14 @@ PettyWallet is a petty cash management tool designed to streamline cash claims a
 Tech Stack
 PettyWallet is built using the following technologies:
 
-Frontend: React (MERN Stack)
-Backend: Node.js with Express
-Database: MongoDB
-CSS Framework: Material UI
-User Authentication: JWT tokens for role-based login and protected routes
-Deployment:
-    Frontend: Firebase
-    Backend: Render
+    Frontend: React (MERN Stack)
+    Backend: Node.js with Express
+    Database: MongoDB
+    CSS Framework: Material UI
+    User Authentication: JWT tokens for role-based login and protected routes
+    Deployment:
+        Frontend: Firebase
+        Backend: Render
 
 Features
     Role-Based Access: Admin and user-specific functionality
