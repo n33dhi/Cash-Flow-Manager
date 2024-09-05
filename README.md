@@ -47,5 +47,3 @@ Contributions are welcome! If you find any bugs or want to contribute to enhanci
 License
 This project is licensed under the MIT License.
 =======
-Welcome to PettyWallet, user-friendly app designed to help you manage petty cash requests and approvals within your organization.
->>>>>>> 2e58d9a4f2520472490ece3670176e37b6180e1c
