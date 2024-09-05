@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 PettyWallet is a petty cash management tool designed to streamline cash claims and administrative processes for both users and admins. This application helps users submit claims, while admins can manage records, approve requests, and track financial data efficiently.
 
 Tech Stack
@@ -46,3 +47,6 @@ Contributions are welcome! If you find any bugs or want to contribute to enhanci
 
 License
 This project is licensed under the MIT License.
+=======
+Welcome to PettyWallet, user-friendly app designed to help you manage petty cash requests and approvals within your organization.
+>>>>>>> 2e58d9a4f2520472490ece3670176e37b6180e1c
