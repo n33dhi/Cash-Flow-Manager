@@ -40,8 +40,9 @@ Start the backend server:
 
     cd backend
     npm start
-    
+
 Start the frontend:
+
     cd frontend
     npm start
     
