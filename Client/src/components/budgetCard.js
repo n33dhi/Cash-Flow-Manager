@@ -68,6 +68,7 @@ const BudgetCard = () => {
         padding: 2,
         position: "relative",
         cursor: canEditBudget ? "pointer" : "default",
+        background: '#fff'
       }}
       onClick={canEditBudget ? () => setOpenDialog(true) : undefined}
     >

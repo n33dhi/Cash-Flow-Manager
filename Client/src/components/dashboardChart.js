@@ -25,7 +25,7 @@ const DashboardPieChart = () => {
         borderRadius: 3,
         padding: 2,
         // boxShadow: "0 4px 16px 0 hsla(0, 0%, 9%, .1)",
-        background: "#f2f2f2",
+        background: "#fff",
         display: "flex",
         flexDirection: "row",
         alignItems: "center",

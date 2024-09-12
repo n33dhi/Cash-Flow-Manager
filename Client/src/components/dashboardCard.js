@@ -19,6 +19,7 @@ const AnalyticsCard = ({ icon, title, value, chipLabel, cardStyle, valueColor, i
         textAlign: 'left', 
         position: 'relative', 
         overflow: 'hidden', 
+        background:'#fff',
         ...cardStyle 
       }}
     >
@@ -84,6 +85,7 @@ const DashboardCards = () => {
         flexDirection: { xs: 'column', md: 'row' }, 
         alignItems: { xs: 'baseline', md: 'center' },
         margin: { xs: '0px', md: '12px' } 
+        
       }}
     >
       <DashboardChart />
