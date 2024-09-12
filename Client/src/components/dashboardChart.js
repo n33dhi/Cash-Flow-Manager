@@ -1,5 +1,5 @@
 import React from "react";
-import { PieChart, Pie, Cell, Text } from "recharts";
+import { PieChart, Pie, Cell } from "recharts";
 import useRequestStatusCounts from "../hooks/requestCounts";
 import { Typography, Card, CardContent, Box } from "@mui/material";
 

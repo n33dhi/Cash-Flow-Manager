@@ -67,8 +67,9 @@ const Login = () => {
         // Redirect based on role (handled by useEffect)
       }
     } catch (err) {
+      // console.log(err);
       toast.error(
-        err.response ? err.response.data.message : "Please Try Again!",
+        err.response ? err.response.data.message : "Wrong Password!",
         {
           position: "top-right",
           style: {
