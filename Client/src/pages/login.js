@@ -84,13 +84,14 @@ const Login = () => {
   };
 
   return (
+    <Box>
     <Box
       sx={{
         display: "flex",
         flexDirection: { xs: "column", md: "row" },
         alignItems: "center",
         justifyContent: { xs: "flex-start", sm: "center", md: "center" },
-        minHeight: "100vh",
+        minHeight: "92vh",
         backgroundColor: "#f2f2f2",
         gap: { xs: 0, md: "50px" },
         padding: { xs: 2, md: 0 },
@@ -263,6 +264,18 @@ const Login = () => {
       >
         <CircularProgress color="primary" />
       </Backdrop>
+      
+    </Box>
+    <Box sx={{
+      display: 'flex',
+      flexDirection:'column',
+      justifyContent:'center',
+      alignItems:'center'
+    }}>
+      <Typography sx={{fontWeight:'500', fontSize:'16px', color:'grey'}}>For Preview - admin@google.com, Admin@123</Typography>
+      <Typography sx={{fontWeight:'600', fontSize:'14px', color:'grey'}}>&copy; 2024 PettyWallet. All rights reserved.</Typography>
+        
+    </Box>
     </Box>
   );
 };
