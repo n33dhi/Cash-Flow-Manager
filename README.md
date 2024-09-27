@@ -50,7 +50,7 @@ Start the frontend:
     npm start
     
 >### Authors
-    -[@n33dhi](https://github.com/n33dhi)
+> [@n33dhi](https://github.com/n33dhi)
 
 >### License
 > [MIT License](LICENSE)
