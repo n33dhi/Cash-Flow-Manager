@@ -133,13 +133,13 @@ const HistoryTable = () => {
     try {
         await api.delete(`/cashQuester/history/${requestId}`);
         setRequests((prevRequests) => prevRequests.filter((request) => request._id !== requestId));
-        toast.success('Request deleted successfully!', { id: toastId, style: {
+        toast.success('Request deleted successfully!', { position: "top-center",id: toastId, style: {
           fontFamily: 'Nunito, sans-serif',
           fontWeight: '700'
         } });
     } catch (error) {
         console.error('Error deleting request:', error);
-        toast.error('Failed to delete request.', { id: toastId, style: {
+        toast.error('Failed to delete request.', { position: "top-center", id: toastId, style: {
           fontFamily: 'Nunito, sans-serif',
           fontWeight: '700'
         } });
@@ -242,7 +242,7 @@ const HistoryTable = () => {
 
   return (
     <Container>
-      <Toaster position="top-right" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} />
       <div style={{
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',

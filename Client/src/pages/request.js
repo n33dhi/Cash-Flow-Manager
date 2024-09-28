@@ -13,6 +13,7 @@ import img from "../smiling man with palm up.svg";
 import api from "../api/axiosConfig";
 import { useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
+import { Toaster, toast } from "react-hot-toast";
 
 const RequestForm = () => {
   const role = useSelector((state) => state.auth.id);
@@ -38,10 +39,26 @@ const RequestForm = () => {
     // console.log(formData);
     try {
       await api.post("/cashQuester/newRequest", formData);
+      toast.success('Request Submitted!',
+        {
+          position: "top-center",
+          style: {
+            fontFamily: "Nunito, sans-serif",
+            fontWeight: "700",
+          },
+        }
+      )
       // console.log("Response:", response.data);
-      navigate("/cashQuester/history");
+      setTimeout(() => {
+        navigate("/cashQuester/history");
+      }, 2000)
+      
     } catch (err) {
-      console.error("Error:", err.response ? err.response.data : err.message);
+      // console.error("Error:", err.response ? err.response.data : err.message);
+      toast.error('Failed to submit request.', { position: "top-center", style: {
+        fontFamily: 'Nunito, sans-serif',
+        fontWeight: '700'
+      } });
     }
   };
 
@@ -220,6 +237,7 @@ const RequestForm = () => {
           </Box>
         </Box>
       </div>
+      <Toaster position="top-center" reverseOrder={false} />
     </>
   );
 };

@@ -16,6 +16,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import api from "../api/axiosConfig";
 import { useNavigate, Link } from "react-router-dom";
 import { validatePassword } from "../Utilities/validation";
+import { Toaster, toast } from "react-hot-toast";
 
 import Logo from "../Sign up form.svg";
 
@@ -74,8 +75,17 @@ const Register = () => {
       .post("/register", formData)
       .then((response) => {
         // console.log(response);
+        toast.success('Success, Please Login!',
+          {
+            position: "top-right",
+            style: {
+              fontFamily: "Nunito, sans-serif",
+              fontWeight: "700",
+            },
+          }
+        )
         if (response.data.status) {
-          navigate("/login");
+          setTimeout(() => {navigate("/login");}, 2000)
         }
       })
       .catch((err) => {
@@ -264,6 +274,7 @@ const Register = () => {
           </Box>
         </Box>
       </Box>
+      <Toaster position="top-right" reverseOrder={false} />
     </Box>
   );
 };
