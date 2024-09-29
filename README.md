@@ -13,7 +13,7 @@ PettyWallet is a petty cash management tool designed to streamline cash claims a
 
 ### **Tech Stack**
 
-+ Frontend: React (MERN Stack)
++ Frontend: React
 + Backend: Node.js with Express
 + Database: MongoDB
 + CSS Framework: Material UI
