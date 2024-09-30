@@ -150,9 +150,10 @@ const Login = () => {
           },
         }}
       >
-        <Typography fontSize={20} fontWeight={800} marginBottom={3}>
+        {/* HIDE COMPANY NAME */}
+        {/* <Typography fontSize={20} fontWeight={800} marginBottom={3}>
           Birdscale
-        </Typography>
+        </Typography> */}
         <Typography fontSize={24}>Welcome to</Typography>
         <Box
           sx={{
