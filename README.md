@@ -58,3 +58,4 @@ Start the frontend:
 ### Contributing
 Contributions are welcome! If you find any bugs or want to contribute to enhancing the project, feel free to open an issue or submit a pull request.
 
+Copyright © 2024 Petty Wallet Project - Released under the [MIT license](LICENSE.txt).
