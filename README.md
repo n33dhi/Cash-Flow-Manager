@@ -49,12 +49,12 @@ Start the frontend:
     cd frontend
     npm start
     
->### Authors
-> [@n33dhi](https://github.com/n33dhi)
+### Authors
+[@n33dhi](https://github.com/n33dhi)
 
->### License
-> [MIT License](LICENSE)
+### License
+[MIT License](LICENSE)
 
->### Contributing
->Contributions are welcome! If you find any bugs or want to contribute to enhancing the project, feel free to open an issue or submit a pull request.
+### Contributing
+Contributions are welcome! If you find any bugs or want to contribute to enhancing the project, feel free to open an issue or submit a pull request.
 
