@@ -11,16 +11,12 @@ PettyWallet is a petty cash management tool designed to streamline cash claims a
 + **Real-Time Updates:** Approved claims reflect dynamically in all widgets
 + **Mobile Responsiveness:** PettyWallet can be accessed seamlessly on mobile devices for on-the-go usage by site engineers
 
-### **Tech Stack**
+### **Tech Overview**
 
-+ Frontend: React
++ Frontend: React.js
 + Backend: Node.js with Express
 + Database: MongoDB
 + CSS Framework: Material UI
-+ User Authentication: JWT tokens for role-based login and protected routes
-+ Deployment:
-  + Frontend: Firebase
-  + Backend: Render
 
 ### **Installation**
 
@@ -39,23 +35,16 @@ Install dependencies:
     cd pettywallet
     npm install
 
-Start the backend server:
+Start the Server:
 
     cd backend
     npm start
 
-Start the frontend:
+Start the Client:
 
     cd frontend
     npm start
     
-### Authors
-[@n33dhi](https://github.com/n33dhi)
 
 ### License
-[MIT License](LICENSE)
-
-### Contributing
-Contributions are welcome! If you find any bugs or want to contribute to enhancing the project, feel free to open an issue or submit a pull request.
-
-Copyright © 2024 Petty Wallet Project - Released under the [MIT license](LICENSE.txt).
+This project is licensed under the [MIT License](LICENSE)
