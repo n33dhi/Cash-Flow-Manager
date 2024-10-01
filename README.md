@@ -18,7 +18,7 @@ PettyWallet is a petty cash management tool designed to streamline cash claims a
 + Database: MongoDB
 + CSS Framework: Material UI
 
-### **Installation**
+### **Contributing**
 
 **Prerequisites**
 + Node.js
@@ -26,14 +26,12 @@ PettyWallet is a petty cash management tool designed to streamline cash claims a
     
 ### _**Steps**_
 
-Clone the repository: 
+Fork & Clone the repository: 
 
     git clone https://github.com/yourusername/pettywallet.git
-
-Install dependencies:
-
-    cd pettywallet
-    npm install
+    git checkout -b feature-name
+    git commit -m "Add feature/fix bug"
+    git push origin feature-name
 
 Start the Server:
 
