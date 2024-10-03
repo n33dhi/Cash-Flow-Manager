@@ -116,7 +116,14 @@ const Navbar = () => {
             }}
           >
             <Typography
-              sx={{ fontSize: "16px", fontWeight: "700", opacity: "80%" }}
+              sx={{ 
+                fontSize: "16px", 
+                fontWeight: "bold", 
+                background:'#f2f2f2', 
+                color:'#ff3434', 
+                padding: '1px 6px', 
+                border: '2px solid #ff3434' ,
+                borderRadius: '6px', }}
             >
               {role === "admin" ? "CashMaster" : "CashQuester"}
             </Typography>
