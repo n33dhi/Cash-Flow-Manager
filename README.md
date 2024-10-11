@@ -29,9 +29,6 @@ PettyWallet is a petty cash management tool designed to streamline cash claims a
 Fork & Clone the repository: 
 
     git clone https://github.com/yourusername/pettywallet.git
-    git checkout -b feature-name
-    git commit -m "Add feature/fix bug"
-    git push origin feature-name
 
 Start the Server:
 
